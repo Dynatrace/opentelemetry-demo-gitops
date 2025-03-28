@@ -1,17 +1,5 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: flagd-config
-  labels:
-    app.kubernetes.io/instance=astroshop
-    app.kubernetes.io/managed-by=Helm
-    app.kubernetes.io/name=astroshop
-    app.kubernetes.io/part-of=opentelemetry-demo
-    app.kubernetes.io/version=1.12.0
-    helm.sh/chart=opentelemetry-demo-0.33.5
-    opentelemetry.io/name=astroshop
 data:
-  
   demo.flagd.json: |
     {
       "$schema": "https://flagd.dev/schema/v0/flags.json",
@@ -25,7 +13,7 @@ data:
           },
           "defaultVariant": "off"
         },
-        "recommendationCacheFailure": {
+        "recommendationServiceCacheFailure": {
           "description": "Fail recommendation service cache",
           "state": "ENABLED",
           "variants": {
@@ -34,7 +22,7 @@ data:
           },
           "defaultVariant": "off"
         },
-        "adManualGc": {
+        "adServiceManualGc": {
           "description": "Triggers full manual garbage collections in the ad service",
           "state": "ENABLED",
           "variants": {
@@ -43,7 +31,7 @@ data:
           },
           "defaultVariant": "off"
         },
-        "adHighCpu": {
+        "adServiceHighCpu": {
           "description": "Triggers high cpu load in the ad service",
           "state": "ENABLED",
           "variants": {
@@ -52,7 +40,7 @@ data:
           },
           "defaultVariant": "off"
         },
-        "adFailure": {
+        "adServiceFailure": {
           "description": "Fail ad service",
           "state": "ENABLED",
           "variants": {
@@ -70,7 +58,7 @@ data:
           },
           "defaultVariant": "off"
         },
-        "cartFailure": {
+        "cartServiceFailure": {
           "description": "Fail cart service",
           "state": "ENABLED",
           "variants": {
@@ -79,21 +67,16 @@ data:
           },
           "defaultVariant": "off"
         },
-        "paymentFailure": {
-          "description": "Fail payment service charge requests n%",
+        "paymentServiceFailure": {
+          "description": "Fail payment service charge requests",
           "state": "ENABLED",
           "variants": {
-            "100%": 1,
-            "90%": 0.95,
-            "75%": 0.75,
-            "50%": 0.5,
-            "25%": 0.25,
-            "10%": 0.1,
-            "off": 0
+            "on": true,
+            "off": false
           },
           "defaultVariant": "off"
         },
-        "paymentUnreachable": {
+        "paymentServiceUnreachable": {
           "description": "Payment service is unavailable",
           "state": "ENABLED",
           "variants": {
@@ -102,7 +85,7 @@ data:
           },
           "defaultVariant": "off"
         },
-        "loadGeneratorFloodHomepage": {
+        "loadgeneratorFloodHomepage": {
           "description": "Flood the frontend with a large amount of requests.",
           "state": "ENABLED",
           "variants": {
@@ -123,3 +106,18 @@ data:
         }
       }
     }
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: astroshop
+    meta.helm.sh/release-namespace: astroshop
+  labels:
+    app.kubernetes.io/instance: astroshop
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: astroshop
+    app.kubernetes.io/part-of: opentelemetry-demo
+    app.kubernetes.io/version: 1.12.0
+    helm.sh/chart: opentelemetry-demo-0.33.5
+    opentelemetry.io/name: astroshop
+  name: astroshop-flagd-config
+  namespace: astroshop
