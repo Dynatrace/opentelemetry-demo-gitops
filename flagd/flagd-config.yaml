@@ -74,7 +74,7 @@ data:
             "on": true,
             "off": false
           },
-          "defaultVariant": "on"
+          "defaultVariant": "off"
         },
         "paymentServiceUnreachable": {
           "description": "Payment service is unavailable",
