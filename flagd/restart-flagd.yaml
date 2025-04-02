@@ -3,8 +3,6 @@ kind: Job
 metadata:
   name: restart-flagd
   namespace: astroshop
-  annotations:
-    argocd.argoproj.io/hook: PostSync
 spec:
   template:
     spec:
