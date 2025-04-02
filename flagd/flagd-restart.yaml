@@ -9,7 +9,7 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: argocd
+      serviceAccountName: flagd-restart-sa
       containers:
       - name: restart
         image: bitnami/kubectl:latest
