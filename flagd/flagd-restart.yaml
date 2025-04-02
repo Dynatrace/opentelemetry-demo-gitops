@@ -19,7 +19,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: argocd
+  name: flagd-restart-sa
   namespace: astroshop
   annotations:
     argocd.argoproj.io/hook: PostSync
@@ -28,7 +28,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: argocd-role
+  name: flagd-restart-role
   namespace: astroshop
   annotations:
     argocd.argoproj.io/hook: PostSync
@@ -41,16 +41,16 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: argocd-role-binding
+  name: flagd-restart-rb
   namespace: astroshop
   annotations:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 subjects:
 - kind: ServiceAccount
-  name: argocd
+  name: flagd-restart-sa
   namespace: astroshop
 roleRef:
   kind: Role
-  name: argocd-role
+  name: flagd-restart-role
   apiGroup: rbac.authorization.k8s.io
