@@ -11,7 +11,9 @@ Flagd stores feature flag states in a ConfigMap. To toggle a problem pattern, th
 
 ## Configuration
 
-`flagd-config.yaml` contains ConfiMap with feature flag states
+`flagd-config.yaml` contains ConfigMap with feature flag states
+
+To toggle flag, change value of **defaultVariant** to either **on** or **off**.
 
 ```json
 "productCatalogFailure": {
@@ -21,7 +23,6 @@ Flagd stores feature flag states in a ConfigMap. To toggle a problem pattern, th
         "on": true,
         "off": false
     },
-    // flag state, to enable switch value to on
     "defaultVariant": "off"
 },
 ```
@@ -30,11 +31,11 @@ Flagd stores feature flag states in a ConfigMap. To toggle a problem pattern, th
 
 Job is tagged as ArgoCD hook, which is triggered automatically after succesful sync and deleted afterward. 
 
-```json
+```yaml
 annotations:
-    // triggers hook after sync
+    #  triggers hook after sync
     argocd.argoproj.io/hook: PostSync
-    // deletes hook resourcers after successful deployment 
+    #  deletes hook resourcers after successful deployment 
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 ```
 
