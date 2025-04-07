@@ -1,4 +1,4 @@
-# Problem pattern toggle
+# Flagd configuration change: problem patterns
 
 ## About
  
