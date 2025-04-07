@@ -2,4 +2,4 @@
 
 ## About
 
-Repository contains [OpenTelemetry demo](https://github.com/open-telemetry/opentelemetry-demo) configurations monitored by ArgoCD applications.
+Repository contains all files related to [OpenTelemetry demo](https://github.com/open-telemetry/opentelemetry-demo) GitOps.
