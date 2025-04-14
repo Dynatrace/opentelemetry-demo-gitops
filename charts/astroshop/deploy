@@ -1,0 +1,5 @@
+#!/bin/bash
+
+NAMESPACE="astroshop"
+
+helm upgrade --install --create-namespace -n ${NAMESPACE} --atomic --debug astroshop .
