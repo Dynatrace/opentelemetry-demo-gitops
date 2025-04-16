@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder
+  labels:
+    dt.owner: &name Team-Backend-Services
+spec:
+  template:
+    metadata:
+      labels:
+        dt.owner: *name

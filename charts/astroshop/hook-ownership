@@ -1,0 +1,8 @@
+#!/bin/bash
+
+KUSTOMIZE_PATH="../../kustomize/ownership-labels"
+
+cd ${KUSTOMIZE_PATH}
+
+cat <&0 > resources.yaml
+kustomize build . && rm resources.yaml

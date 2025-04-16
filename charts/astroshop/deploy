@@ -2,4 +2,12 @@
 
 NAMESPACE="astroshop"
 
-helm upgrade --install --create-namespace -n ${NAMESPACE} --atomic --debug astroshop .
+helm upgrade --install \
+    --create-namespace \
+    -n ${NAMESPACE} \
+    --atomic \
+    --debug \
+    --post-renderer ./hook-ownership \
+    --set collectorTenantToken="${QNA_TOKEN}" \
+    --set collectorTenantEndpoint="${QNA_ENDPOINT}" \
+    astroshop .
