@@ -1,7 +1,6 @@
 apiVersion: v1
 data:
-  demo.flagd.json: |
-    {
+  demo.flagd.json: |\n    {
       "$schema": "https://flagd.dev/schema/v0/flags.json",
       "flags": {
         "productCatalogFailure": {
@@ -11,7 +10,7 @@ data:
             "on": true,
             "off": false
           },
-          "defaultVariant": "off"
+          "defaultVariant": "on"
         },
         "recommendationServiceCacheFailure": {
           "description": "Fail recommendation service cache",
@@ -105,8 +104,7 @@ data:
           "defaultVariant": "off"
         }
       }
-    }
-kind: ConfigMap
+    }\nkind: ConfigMap
 metadata:
   annotations:
     meta.helm.sh/release-name: astroshop
