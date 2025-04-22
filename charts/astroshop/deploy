@@ -8,6 +8,6 @@ helm upgrade --install \
     --atomic \
     --debug \
     --post-renderer ./hook-ownership \
-    --set collectorTenantToken="${QNA_TOKEN}" \
-    --set collectorTenantEndpoint="${QNA_ENDPOINT}" \
+    --set collectorTenantToken="${DATA_INGEST_TOKEN}" \
+    --set collectorTenantEndpoint="${OTEL_INGEST_ENDPOINT}" \
     astroshop .
