@@ -92,7 +92,7 @@ data:
             "on": 100,
             "off": 0
           },
-          "defaultVariant": "off"
+          "defaultVariant": "on"
         },
         "imageSlowLoad": {
           "description": "slow loading images in the frontend",
