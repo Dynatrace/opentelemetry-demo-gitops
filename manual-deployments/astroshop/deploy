@@ -10,4 +10,4 @@ helm upgrade --install \
     --post-renderer ./hook-ownership \
     --set collectorTenantToken="${DATA_INGEST_TOKEN}" \
     --set collectorTenantEndpoint="${OTEL_INGEST_ENDPOINT}" \
-    astroshop .
+    astroshop ../../charts/astroshop
