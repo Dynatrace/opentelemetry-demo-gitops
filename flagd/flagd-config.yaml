@@ -100,7 +100,7 @@ data:
             }
           },
           "defaultVariant": "off"
-        },        
+        },
         "loadgeneratorFloodHomepage": {
           "description": "Flood the frontend with a large amount of requests.",
           "state": "ENABLED",
@@ -108,7 +108,7 @@ data:
             "on": 100,
             "off": 0
           },
-          "defaultVariant": "on"
+          "defaultVariant": "off"
         },
         "imageSlowLoad": {
           "description": "slow loading images in the frontend",
