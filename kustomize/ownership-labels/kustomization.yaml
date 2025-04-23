@@ -1,0 +1,24 @@
+resources:
+  - resources.yaml
+
+patches:
+  - path: team-backend-services.yaml
+    target:
+      kind: Deployment
+      name: (flagd|valkey|load-generator)
+  - path: team-business-solutions.yaml
+    target:
+      kind: Deployment
+      name: (ad|kafka|product-catalog|quote)
+  - path: team-ecommerce.yaml
+    target:
+      kind: Deployment
+      name: (cart|currency|email|fraud-detection|image-provider|recommendation|shipping)
+  - path: team-financial-services.yaml
+    target:
+      kind: Deployment
+      name: (accounting|checkout|payment)
+  - path: team-ui.yaml
+    target:
+      kind: Deployment
+      name: frontend

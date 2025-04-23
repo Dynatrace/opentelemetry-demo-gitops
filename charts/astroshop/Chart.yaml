@@ -1,0 +1,13 @@
+apiVersion: v2
+name: astroshop
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+# appVersion is used to establish the docker image tag
+# for each service, which means it should reflect the
+# latest desired build version
+appVersion: "a0816d3"
+dependencies:
+  - name: opentelemetry-demo
+    version: 0.37.0
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
