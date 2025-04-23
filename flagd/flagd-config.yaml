@@ -11,7 +11,7 @@ data:
             "on": true,
             "off": false
           },
-          "defaultVariant": "off"
+          "defaultVariant": "on"
         },
         "recommendationServiceCacheFailure": {
           "description": "Fail recommendation service cache",
@@ -114,10 +114,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: astroshop
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: astroshop
     app.kubernetes.io/part-of: opentelemetry-demo
-    app.kubernetes.io/version: 1.12.0
-    helm.sh/chart: opentelemetry-demo-0.33.5
-    opentelemetry.io/name: astroshop
-  name: astroshop-flagd-config
+    app.kubernetes.io/version: 2.0.1
+    helm.sh/chart: opentelemetry-demo-0.36.4
+  name: flagd-config
   namespace: astroshop
