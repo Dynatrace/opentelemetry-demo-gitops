@@ -11,7 +11,7 @@ data:
             "on": true,
             "off": false
           },
-          "defaultVariant": "off"
+          "defaultVariant": "on"
         },
         "recommendationCacheFailure": {
           "description": "Fail recommendation service cache",
