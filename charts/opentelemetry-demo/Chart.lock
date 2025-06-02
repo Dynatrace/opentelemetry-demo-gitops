@@ -1,0 +1,9 @@
+dependencies:
+- name: dapr
+  repository: https://dapr.github.io/helm-charts/
+  version: 1.15.4
+- name: opentelemetry-demo
+  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  version: 0.37.0
+digest: sha256:e1e13505e2cbbd5baca50afc9dcf13a8e4fa09a24891d92dc573ce25b201b5cd
+generated: "2025-06-02T17:35:48.04338+02:00"

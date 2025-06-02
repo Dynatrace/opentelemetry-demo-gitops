@@ -1,5 +1,38 @@
-collectorTenantEndpoint: ""
-collectorTenantToken: ""
+default:
+  env: [ ]
+  # Allows overriding and additions to .Values.default.env
+  envOverrides: [ ]
+  #  - name: OTEL_K8S_NODE_NAME
+  #    value: "someConstantValue"
+  image:
+    repository: ghcr.io/open-telemetry/demo
+    # Overrides the image tag whose default is the chart appVersion.
+    # The service's name will be applied to the end of this value.
+    tag: ""
+    pullPolicy: IfNotPresent
+    pullSecrets: [ ]
+  # Default # of replicas for all components
+  replicas: 1
+  # default revisionHistoryLimit for all components (number of old ReplicaSets to retain)
+  revisionHistoryLimit: 10
+  # Default schedulingRules for all components
+  schedulingRules:
+    nodeSelector: { }
+    affinity: { }
+    tolerations: [ ]
+  # Default securityContext for all components
+  securityContext: { }
+
+  collectorTenantEndpoint: ""
+  collectorTenantToken: ""
+  postgresql_user: postgres
+  postgresql_db: postgres
+  postgresql_password: example
+
+dapr:
+  global:
+    namespace: dapr-system
+
 
 opentelemetry-demo:
   default:
@@ -56,6 +89,11 @@ opentelemetry-demo:
     cart:
       podAnnotations:
         metadata.dynatrace.com/process.technology: ".NET"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "cart"
+        dapr.io/app-port: "8080"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/config: "app-config"
       envOverrides:
         - name: DT_LOGLEVELCON # https://www.dynatrace.com/support/help/shortlink/agent-logging
           value: "" # info
@@ -213,9 +251,16 @@ opentelemetry-demo:
       resources:
         limits:
           memory: 512Mi
+
     product-catalog:
+     # image: 'hrexed/demo:latest-product-catalog'
       podAnnotations:
         metadata.dynatrace.com/process.technology: "go"
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "product-catalog"
+        dapr.io/app-port: "8080"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/config: "app-config"
       envOverrides:
         - name: DT_LOGLEVELCON # https://www.dynatrace.com/support/help/shortlink/agent-logging
           value: "" # info
@@ -267,6 +312,9 @@ opentelemetry-demo:
         limits:
           memory: 1024Mi
     valkey-cart:
+      ports:
+       - name: valkey-cart
+         value: 6379
       podAnnotations:
         dynatrace.com/inject: "false"
         metrics.dynatrace.com/port: "9121" # https://www.dynatrace.com/news/blog/simplify-observability-for-all-your-custom-metrics-part-4-prometheus/
@@ -282,6 +330,7 @@ opentelemetry-demo:
             port: 9121
           useDefault:
             env: false
+
   opensearch:
     podAnnotations:
       metadata.dynatrace.com/process.technology: "elasticsearch"
@@ -577,3 +626,17 @@ opentelemetry-demo:
     enabled: false
   grafana:
     enabled: false
+
+components:
+  product-db:
+    enabled: true
+    image: 'postgres:15.1'
+    useDefault:
+      env: false
+    replicas: 1
+    ports:
+      - protocol: TCP
+        port: 5432
+        appProtocol: tcp
+        targetPort: 5432
+        name: sql
