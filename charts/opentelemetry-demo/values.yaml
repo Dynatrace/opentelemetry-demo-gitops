@@ -1,28 +1,4 @@
 default:
-  env: [ ]
-  # Allows overriding and additions to .Values.default.env
-  envOverrides: [ ]
-  #  - name: OTEL_K8S_NODE_NAME
-  #    value: "someConstantValue"
-  image:
-    repository: ghcr.io/open-telemetry/demo
-    # Overrides the image tag whose default is the chart appVersion.
-    # The service's name will be applied to the end of this value.
-    tag: ""
-    pullPolicy: IfNotPresent
-    pullSecrets: [ ]
-  # Default # of replicas for all components
-  replicas: 1
-  # default revisionHistoryLimit for all components (number of old ReplicaSets to retain)
-  revisionHistoryLimit: 10
-  # Default schedulingRules for all components
-  schedulingRules:
-    nodeSelector: { }
-    affinity: { }
-    tolerations: [ ]
-  # Default securityContext for all components
-  securityContext: { }
-
   collectorTenantEndpoint: ""
   collectorTenantToken: ""
   postgresql_user: postgres
