@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-db
+spec:
+  selector:
+    app: postgres
+ports:
+  {{- if index .Values "components" "product-db" "ports" }}
+    {{- range index .Values "components" "product-db" "ports" }}
+    - name: {{ .name }}
+      port: {{ .value }}
+      targetPort: {{ .value }}
+      protocol: {{ .protocol }}
+      appProtocol: {{ .appProtocol }}
+    {{- end }}
+    {{- end }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      serviceAccountName: {{ include "astroshop.opentelemetry.serviceAccountName" . }}
+      containers:
+        - name: product-db
+          image: {{ index .Values "components" "product-db" "image" | quote }}
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 600Mi
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres_password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres_db
+
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: init-statement
+              readOnly: true
+      volumes:
+        - name: init-statement
+          configMap:
+            name: db-config

@@ -1,0 +1,18 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: product-store
+  namespace: "{{ .Release.Namespace }}"
+spec:
+  type: state.postgresql
+  version: v1
+  metadata:
+    - name: connectionString
+      valueFrom:
+        secretKeyRef:
+          name: dynatrace
+          key: dynatrace-postgresql-connection
+    - name: tableName
+      value: productstate
+    - name: cleanupInterval
+      value: 0

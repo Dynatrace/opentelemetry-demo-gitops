@@ -1,0 +1,15 @@
+#!/bin/bash
+
+NAMESPACE="opentelemetry-demo"
+
+helm upgrade --install astroshop ./charts/opentelemetry-demo \
+    --create-namespace -n ${NAMESPACE} \
+    --atomic --debug \
+    --post-renderer ./hook-ownership \
+     --set collectorTenantToken="${DATA_INGEST_TOKEN}" \
+    --set collectorTenantEndpoint="${OTEL_INGEST_ENDPOINT}" \
+    --dry-run
+
+
+
+

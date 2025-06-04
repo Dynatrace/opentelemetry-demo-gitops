@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KUSTOMIZE_PATH="../../kustomize/ownership-labels"
+KUSTOMIZE_PATH="config/k8s-labels/ownership/kustomize/ownership-labels"
 
 cd ${KUSTOMIZE_PATH}
 
