@@ -1,5 +1,19 @@
-collectorTenantEndpoint: ""
-collectorTenantToken: ""
+components:
+  dt-credentials:
+    # when enabled it requires the `tenantEndpoint` and `tenantToken` values to be set
+    # when disabled make sure to create a `dt-credentials` secret with
+    # DT_ENDPOINT and DT_API_TOKEN values
+    enabled: false
+    # tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
+  ingress:
+    # the ip whitelist used for the ingress
+    enabled: true
+    hostUrl: ""
+    # allows for limitting the allowed ips, leave empty to not add the restriction
+    # two separate fields are given to allow for more complicated setups
+    ipWhitelist:
+      base: []
+      extra: []
 
 opentelemetry-demo:
   default:
@@ -173,21 +187,16 @@ opentelemetry-demo:
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "python"
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 2Gi
       envOverrides:
         - name: LOCUST_USERS
           value: "2"
         - name: LOCUST_HEADLESS
           value: "true"
-      # additionalVolumes:
-      #   - name: tmp
-      #     mountPath: /tmp
-      #     emptyDir:
-      #       medium: Memory
-      # mountedEmptyDirs:
-      #   - mountPath: /tmp
-      #     name: tmp
-      #     emptyDir:
-      #       medium: Memory
     payment:
       podAnnotations:
         metadata.dynatrace.com/process.technology: "nodejs"
@@ -536,7 +545,7 @@ opentelemetry-demo:
       name: "astroshop-otel-gateway-collector"
     extraEnvsFrom:
       - secretRef:
-          name: dynatrace-otelcol-dt-api-credentials
+          name: dt-credentials
     extraVolumes:
       - name: hostfs
         hostPath:
