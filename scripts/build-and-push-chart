@@ -1,0 +1,26 @@
+#!/bin/bash
+
+BASE_REPO="oci://europe-docker.pkg.dev"
+HELM_REPO="${BASE_REPO}/dynatrace-demoability/helm"
+
+cd ../charts/astroshop
+
+echo "Cleaning up old package"
+rm *.tgz
+
+echo "Creating new package"
+helm package .
+
+VERSION=$(yq '.version' Chart.yaml)
+PACKAGE=$(yq '.name' Chart.yaml)
+FILE_NAME="${PACKAGE}-${VERSION}.tgz"
+
+echo "Authorizing to the repository"
+gcloud auth print-access-token \
+| helm registry login \
+    -u oauth2accesstoken \
+    --password-stdin \
+    "${BASE_REPO}"
+
+echo "Pushing the chart to repo"
+helm push "${FILE_NAME}" "${HELM_REPO}"

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# test if the chart builds properly
+
+helm template astroshop ../charts/astroshop -f ./test-values.yaml --debug > resources.yaml

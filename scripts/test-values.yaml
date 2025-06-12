@@ -1,0 +1,13 @@
+components:
+  ingress:
+    parts:
+      images: false
+    ipWhitelist:
+      extra:
+        - 10.1.2.3/12
+      base:
+        - 1.2.3.4/27
+        - 5.6.7.8/32
+        - 9.10.11.12/32
+        - 13.14.15.16/28
+        - 17.18.19.20/32
