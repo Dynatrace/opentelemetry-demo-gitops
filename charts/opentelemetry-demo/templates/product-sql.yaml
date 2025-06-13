@@ -5,15 +5,15 @@ metadata:
 spec:
   selector:
     app: postgres
-ports:
-  {{- if index .Values "components" "product-db" "ports" }}
-    {{- range index .Values "components" "product-db" "ports" }}
-    - name: {{ .name }}
-      port: {{ .value }}
-      targetPort: {{ .value }}
-      protocol: {{ .protocol }}
-      appProtocol: {{ .appProtocol }}
-    {{- end }}
+  ports:
+    {{- if index .Values "components" "product-db" "ports" }}
+      {{- range index .Values "components" "product-db" "ports" }}
+        - name: {{ .name }}
+          port: {{ .port }}
+          targetPort: {{ .targetPort }}
+          protocol: {{ .protocol }}
+          appProtocol: {{ .appProtocol }}
+      {{- end }}
     {{- end }}
 
 ---

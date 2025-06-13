@@ -2,6 +2,6 @@
 
 
 {{- define "astroshop.opentelemetry.serviceAccountName" -}}
-{{ printf "%s-otel-demo" .Release.Name }}
+{{ printf "%s" .Release.Name }}
 {{- end }}
 

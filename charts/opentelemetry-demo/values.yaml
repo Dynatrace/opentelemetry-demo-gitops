@@ -5,16 +5,11 @@ default:
   postgresql_db: postgres
   postgresql_password: example
 
-dapr:
-  global:
-    namespace: dapr-system
-
-
 opentelemetry-demo:
   default:
     image:
-      repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop
-      tag: e6d80b1
+      repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop-rds-and-payment-merge
+      tag: 2fcd9d7
   components:
     accounting:
       podAnnotations:

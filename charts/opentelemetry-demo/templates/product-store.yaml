@@ -8,10 +8,9 @@ spec:
   version: v1
   metadata:
     - name: connectionString
-      valueFrom:
-        secretKeyRef:
-          name: dynatrace
-          key: dynatrace-postgresql-connection
+      secretKeyRef:
+        key: connectionString
+        name: dynatrace-postgresql-connection
     - name: tableName
       value: productstate
     - name: cleanupInterval
