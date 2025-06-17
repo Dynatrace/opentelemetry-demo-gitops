@@ -1,0 +1,88 @@
+{{- if .Values.components.ingress.enabled -}}
+{{- $annotation := include "opentelemetry-demo.ingressWhitelistAnnotation" . -}}
+{{- $host := required "[host] is required when [ingress] is enabled" .Values.components.ingress.host -}}
+---
+apiVersion: "networking.k8s.io/v1"
+kind: Ingress
+metadata:
+  name: frontendproxy-root
+  annotations:
+    {{ $annotation }}
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 8080
+---
+apiVersion: "networking.k8s.io/v1"
+kind: Ingress
+metadata:
+  name: frontendproxy-rewrite-images
+  annotations:
+    {{ $annotation }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /images(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: image-provider
+                port:
+                  number: 8081
+---
+apiVersion: "networking.k8s.io/v1"
+kind: Ingress
+metadata:
+  name: frontendproxy-rewrite-feature
+  annotations:
+    {{ $annotation }}
+    ingress.kubernetes.io/rewrite-target: /feature/$1
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /feature(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: flagd
+                port:
+                  number: 4000
+---
+apiVersion: "networking.k8s.io/v1"
+kind: Ingress
+metadata:
+  name: frontendproxy-rewrite-flags
+  annotations:
+    {{ $annotation }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /flagservice(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: flagd
+                port:
+                  number: 8013
+{{- end }}

@@ -1,0 +1,12 @@
+{{- define "opentelemetry-demo.ingressWhitelist" -}}
+{{- with .Values.components.ingress.ipWhitelist -}}
+{{- concat .base .extra | compact | uniq | join ", " -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "opentelemetry-demo.ingressWhitelistAnnotation" -}}
+{{- $whitelist := include "opentelemetry-demo.ingressWhitelist" . | trim -}}
+{{- if $whitelist -}}
+nginx.ingress.kubernetes.io/whitelist-source-range: {{ $whitelist }}
+{{- end -}}
+{{- end -}}
