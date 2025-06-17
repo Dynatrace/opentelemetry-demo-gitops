@@ -6,6 +6,7 @@ apiVersion: "networking.k8s.io/v1"
 kind: Ingress
 metadata:
   name: frontendproxy-root
+  namespace: "{{ .Release.Namespace }}"
   annotations:
     {{ $annotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -27,6 +28,7 @@ apiVersion: "networking.k8s.io/v1"
 kind: Ingress
 metadata:
   name: frontendproxy-rewrite-images
+  namespace: "{{ .Release.Namespace }}"
   annotations:
     {{ $annotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /$2
@@ -48,6 +50,7 @@ apiVersion: "networking.k8s.io/v1"
 kind: Ingress
 metadata:
   name: frontendproxy-rewrite-feature
+  namespace: "{{ .Release.Namespace }}"
   annotations:
     {{ $annotation }}
     ingress.kubernetes.io/rewrite-target: /feature/$1
@@ -69,6 +72,7 @@ apiVersion: "networking.k8s.io/v1"
 kind: Ingress
 metadata:
   name: frontendproxy-rewrite-flags
+  namespace: "{{ .Release.Namespace }}"
   annotations:
     {{ $annotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /$2
