@@ -4,6 +4,7 @@ default:
   postgresql_user: postgres
   postgresql_db: postgres
   postgresql_password: example
+  postgresql_host: product-db
 
 opentelemetry-demo:
   default:
