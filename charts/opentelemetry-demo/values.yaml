@@ -216,16 +216,11 @@ opentelemetry-demo:
           value: "2"
         - name: LOCUST_HEADLESS
           value: "true"
-      # additionalVolumes:
-      #   - name: tmp
-      #     mountPath: /tmp
-      #     emptyDir:
-      #       medium: Memory
-      # mountedEmptyDirs:
-      #   - mountPath: /tmp
-      #     name: tmp
-      #     emptyDir:
-      #       medium: Memory
+      resources:
+        requests:
+          memory: 2Gi
+        limits:
+          memory: 2Gi
     payment:
       podAnnotations:
         metadata.dynatrace.com/process.technology: "nodejs"
@@ -585,7 +580,7 @@ opentelemetry-demo:
       name: "astroshop-otel-gateway-collector"
     extraEnvsFrom:
       - secretRef:
-          name: dynatrace-otelcol-dt-api-credentials
+          name: dt-credentials
     extraVolumes:
       - name: hostfs
         hostPath:

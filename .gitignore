@@ -1,2 +1,4 @@
 .env
 resources.yaml
+charts/**/charts
+*.tgz
