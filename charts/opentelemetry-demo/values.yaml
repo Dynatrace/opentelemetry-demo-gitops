@@ -10,7 +10,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop-rds-and-payment-merge
-      tag: 2fcd9d7
+      tag: 018408c
   components:
     accounting:
       podAnnotations:
