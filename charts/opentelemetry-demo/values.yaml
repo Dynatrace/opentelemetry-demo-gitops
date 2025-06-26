@@ -4,12 +4,13 @@ default:
   postgresql_user: postgres
   postgresql_db: postgres
   postgresql_password: example
+  postgresql_host: product-db
 
 opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop-rds-and-payment-merge
-      tag: 2fcd9d7
+      tag: 018408c
   components:
     accounting:
       podAnnotations:
