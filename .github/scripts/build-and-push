@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "Creating new package"
+helm package $CHART_PATH
+
+VERSION=$(yq '.version' "${CHART_PATH}/Chart.yaml")
+PACKAGE=$(yq '.name' "${CHART_PATH}/Chart.yaml")
+FILE_NAME="${PACKAGE}-${VERSION}.tgz"
+
+echo "Authorizing to the repository"
+gcloud auth print-access-token \
+| helm registry login \
+    -u oauth2accesstoken \
+    --password-stdin \
+    "oci://${BASE_REPO}"
+
+echo "Pushing the chart to repo"
+helm push "${FILE_NAME}" "oci://${BASE_REPO}/${HELM_REPO}"

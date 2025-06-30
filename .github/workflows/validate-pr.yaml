@@ -1,0 +1,15 @@
+name: Validate PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - charts/*
+
+jobs:
+  validate-pr:
+    uses: ./.github/workflows/build-and-push.yaml
+    with:
+      push: false
+    secrets: inherit

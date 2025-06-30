@@ -9,21 +9,29 @@ on:
         required: false
         type: boolean
 
+env:
+  CHART_PATH: charts/astroshop
+  SCRIPTS_PATH: .github/scripts
+  BASE_REPO: "europe-docker.pkg.dev"
+  HELM_REPO_PATH: "dynatrace-demoability/helm"
+
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install helm
         uses: azure/setup-helm@v4.3.0
         with:
-          version: "^3.18"
+          version: "3.18.2"
+      - name: Setup helm
+        run: ./$SCRIPTS_PATH/setup-helm
       - name: Test if chart builds
-        run: helm template astroshop charts/opentelemetry-demo -f config/helm-values/test.yaml
+        run: helm template astroshop $CHART_PATH -f config/helm-values/test.yaml > output.yaml
 
   validate-version:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,17 +42,28 @@ jobs:
       - name: Set up sdk
         uses: google-github-actions/setup-gcloud@v2
       - name: Verify the version
-        run: ./internal/verify-chart-version
+        run: ./$SCRIPTS_PATH/verify-chart-version
 
-  # publish-chart:
-  #   runs-on: ubuntu-24.04
-  #   needs:
-  #     - test
-  #     - validate-version
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Install helm
-  #       uses: azure/setup-helm@v4.3.0
-  #       with:
-  #         version: "^3.18"
+  publish-chart:
+    runs-on: ubuntu-22.04
+    needs:
+      - test
+      - validate-version
+    if: ${{ github.event.inputs.push }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install helm
+        uses: azure/setup-helm@v4.3.0
+        with:
+          version: "3.18.2"
+      - name: Auth gcloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCLOUD_SA }}"
+      - name: Set up sdk
+        uses: google-github-actions/setup-gcloud@v2
+      - name: Setup helm
+        run: ./$SCRIPTS_PATH/setup-helm
+      - name: Build and push
+        run: ./$SCRIPTS_PATH/build-and-push

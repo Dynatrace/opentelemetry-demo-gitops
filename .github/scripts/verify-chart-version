@@ -1,0 +1,16 @@
+#!/bin/bash
+
+VERSION=$(yq '.version' "${CHART_PATH}/Chart.yaml")
+
+echo "Looking for version [${VERSION}]"
+
+gcloud artifacts docker tags list "${BASE_REPO}/${HELM_REPO_PATH}" --format="value(tag)" | grep -Fx "${VERSION}"
+
+if [ $? -eq 0 ]
+then
+    echo "Version already exists"
+    exit 1
+else
+    echo "Version not found"
+    exit 0
+fi
