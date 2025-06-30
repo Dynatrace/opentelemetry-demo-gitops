@@ -2,7 +2,7 @@
 
 BASE_REPO="oci://europe-docker.pkg.dev"
 HELM_REPO="${BASE_REPO}/dynatrace-demoability/helm"
-CHART_PATH="../charts/opentelemetry-demo"
+CHART_PATH="../charts/astroshop"
 
 cd "$CHART_PATH"
 
