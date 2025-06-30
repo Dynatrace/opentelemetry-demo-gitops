@@ -2,6 +2,7 @@ default:
   postgresql_user: postgres
   postgresql_db: postgres
   postgresql_password: example
+  postgresql_host: product-db
 
 components:
   dt-credentials:
@@ -38,7 +39,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop-rds-and-payment-merge
-      tag: 2fcd9d7
+      tag: 018408c
   components:
     accounting:
       podAnnotations:
@@ -476,7 +477,7 @@ opentelemetry-demo:
         otlp:
           protocols:
             grpc:
-              endpoint: ${env:MY_POD_IP}:4317
+              endpoint: 0.0.0.0:4317
             http:
               endpoint: ${env:MY_POD_IP}:4318
         hostmetrics:
@@ -577,6 +578,18 @@ opentelemetry-demo:
             exporters: [otlphttp, debug] # debug
         extensions:
           - health_check
+        telemetry:
+          metrics:
+            address: ${env:MY_POD_IP}:8888
+            level: detailed
+            readers:
+              - periodic:
+                  exporter:
+                    otlp:
+                      endpoint: 127.0.0.1:4317
+                      protocol: grpc
+                  interval: 10000
+                  timeout: 5000
     serviceAccount:
       create: true
       name: "astroshop-otel-gateway-collector"
