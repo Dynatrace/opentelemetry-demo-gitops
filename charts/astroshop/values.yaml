@@ -212,6 +212,8 @@ opentelemetry-demo:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "python"
       envOverrides:
+        - name: LOCUST_HOST
+          value: http://frontend-proxy:8080
         - name: LOCUST_USERS
           value: "2"
         - name: LOCUST_HEADLESS
