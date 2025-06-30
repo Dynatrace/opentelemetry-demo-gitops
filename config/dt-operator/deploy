@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CLUSTER_NAME="${CLUSTER_NAME:-"otel-demo-cluster"}"
+
+helm upgrade --install dynatrace-operator oci://public.ecr.aws/dynatrace/dynatrace-operator \
+    --create-namespace \
+    --namespace dynatrace \
+    --atomic \
+    --wait
+
+kubectl -n dynatrace create secret generic "${CLUSTER_NAME}" \
+    --from-literal="apiToken=${OPERATOR_TOKEN}" \
+    --from-literal="dataIngestToken=${DATA_INGEST_TOKEN}"
+
+yq ".spec.apiUrl = env(CLUSTER_API_URL) | .metadata.name = env(CLUSTER_NAME)" dynakube.yaml | kubectl -n dynatrace apply -f -
