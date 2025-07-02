@@ -14,5 +14,7 @@ gcloud auth print-access-token \
     --password-stdin \
     "oci://${BASE_REPO}"
 
-echo "Pushing the chart to repo"
-helm push "${FILE_NAME}" "oci://${BASE_REPO}/${HELM_REPO}"
+FULL_REPO="oci://${BASE_REPO}/${HELM_REPO_PATH}"
+
+echo "Pushing the chart [${FILE_NAME}] to repo [${FULL_REPO}]"
+helm push "${FILE_NAME}" "${FULL_REPO}"
