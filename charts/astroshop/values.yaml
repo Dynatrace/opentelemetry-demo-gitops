@@ -1,10 +1,39 @@
 default:
-  collectorTenantEndpoint: ""
-  collectorTenantToken: ""
   postgresql_user: postgres
   postgresql_db: postgres
   postgresql_password: example
   postgresql_host: product-db
+
+components:
+  dt-credentials:
+    # when enabled it requires the `tenantEndpoint` and `tenantToken` values to be set
+    # when disabled make sure to create a `dt-credentials` secret with
+    # DT_ENDPOINT and DT_API_TOKEN values
+    enabled: false
+    # tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
+    # tenantToken: dt0c01.abc.xxx
+  ingress:
+    enabled: true
+    # used for setting host in ingress, the url set in loadgen should match this
+    # host: ""
+    # the ip whitelist used for the ingress
+    # allows for limitting the allowed ips, leave empty to not add the restriction
+    # two separate fields are given to allow for more complicated setups
+    ipWhitelist:
+      base: []
+      extra: []
+  product-db:
+    enabled: true
+    image: "postgres:15.1"
+    useDefault:
+      env: false
+    replicas: 1
+    ports:
+      - protocol: TCP
+        port: 5432
+        appProtocol: tcp
+        targetPort: 5432
+        name: sql
 
 opentelemetry-demo:
   default:
@@ -185,20 +214,17 @@ opentelemetry-demo:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "python"
       envOverrides:
+        - name: LOCUST_HOST
+          value: http://frontend-proxy:8080
         - name: LOCUST_USERS
           value: "2"
         - name: LOCUST_HEADLESS
           value: "true"
-      # additionalVolumes:
-      #   - name: tmp
-      #     mountPath: /tmp
-      #     emptyDir:
-      #       medium: Memory
-      # mountedEmptyDirs:
-      #   - mountPath: /tmp
-      #     name: tmp
-      #     emptyDir:
-      #       medium: Memory
+      resources:
+        requests:
+          memory: 2Gi
+        limits:
+          memory: 2Gi
     payment:
       podAnnotations:
         metadata.dynatrace.com/process.technology: "nodejs"
@@ -226,7 +252,7 @@ opentelemetry-demo:
           memory: 512Mi
 
     product-catalog:
-     # image: 'hrexed/demo:latest-product-catalog'
+      # image: 'hrexed/demo:latest-product-catalog'
       podAnnotations:
         metadata.dynatrace.com/process.technology: "go"
         dapr.io/enabled: "true"
@@ -286,8 +312,8 @@ opentelemetry-demo:
           memory: 1024Mi
     valkey-cart:
       ports:
-       - name: valkey-cart
-         value: 6379
+        - name: valkey-cart
+          value: 6379
       podAnnotations:
         dynatrace.com/inject: "false"
         metrics.dynatrace.com/port: "9121" # https://www.dynatrace.com/news/blog/simplify-observability-for-all-your-custom-metrics-part-4-prometheus/
@@ -558,19 +584,19 @@ opentelemetry-demo:
             address: ${env:MY_POD_IP}:8888
             level: detailed
             readers:
-            - periodic:
-                exporter:
-                  otlp:
-                    endpoint: 127.0.0.1:4317
-                    protocol: grpc
-                interval: 10000
-                timeout: 5000          
+              - periodic:
+                  exporter:
+                    otlp:
+                      endpoint: 127.0.0.1:4317
+                      protocol: grpc
+                  interval: 10000
+                  timeout: 5000
     serviceAccount:
       create: true
       name: "astroshop-otel-gateway-collector"
     extraEnvsFrom:
       - secretRef:
-          name: dynatrace-otelcol-dt-api-credentials
+          name: dt-credentials
     extraVolumes:
       - name: hostfs
         hostPath:
@@ -611,17 +637,3 @@ opentelemetry-demo:
     enabled: false
   grafana:
     enabled: false
-
-components:
-  product-db:
-    enabled: true
-    image: 'postgres:15.1'
-    useDefault:
-      env: false
-    replicas: 1
-    ports:
-      - protocol: TCP
-        port: 5432
-        appProtocol: tcp
-        targetPort: 5432
-        name: sql

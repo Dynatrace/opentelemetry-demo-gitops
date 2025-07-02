@@ -1,0 +1,18 @@
+{{- define "opentelemetry-demo.ingressWhitelist" -}}
+{{- with .Values.components.ingress.ipWhitelist -}}
+{{- concat .base .extra | compact | uniq | join ", " -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "opentelemetry-demo.ingressWhitelistAnnotation" -}}
+{{- $whitelist := include "opentelemetry-demo.ingressWhitelist" . | trim -}}
+{{- if $whitelist -}}
+nginx.ingress.kubernetes.io/whitelist-source-range: {{ $whitelist }}
+{{- end -}}
+{{- end -}}
+
+{{- define "opentelemetry-demo.redisHost" -}}
+{{- $name := index .Values "opentelemetry-demo" "components" "valkey-cart" "ports" 0 "name" -}}
+{{- $port := index .Values "opentelemetry-demo" "components" "valkey-cart" "ports" 0 "value" -}}
+{{- printf "%s:%s" $name (toString $port) -}}
+{{- end -}}

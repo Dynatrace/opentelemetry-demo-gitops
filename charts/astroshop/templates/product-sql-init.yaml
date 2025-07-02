@@ -4,13 +4,13 @@ metadata:
   name: db-config
   namespace: "{{ .Release.Namespace }}"
 data:
-  init.sql: |    
+  init.sql: |
     CREATE TABLE "productstate" (
     "key"	VARCHAR(20),
     "value"	jsonb
     );
-    
-    
+
+
     INSERT INTO "productstate" ("key", "value") VALUES
     ('OLJCESPC7Z', '{
     "id": "OLJCESPC7Z",

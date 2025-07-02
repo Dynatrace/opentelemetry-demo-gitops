@@ -1,0 +1,44 @@
+#!/bin/bash
+
+BASE_REPO="oci://europe-docker.pkg.dev"
+HELM_REPO="${BASE_REPO}/dynatrace-demoability/helm"
+CHART_PATH="../charts/astroshop"
+
+cd "$CHART_PATH"
+
+echo "Cleaning up old packages"
+rm *.tgz
+
+echo "Creating new package"
+helm package .
+
+VERSION=$(yq '.version' Chart.yaml)
+PACKAGE=$(yq '.name' Chart.yaml)
+FILE_NAME="${PACKAGE}-${VERSION}.tgz"
+
+echo "Authorizing to the repository"
+gcloud auth print-access-token \
+| helm registry login \
+    -u oauth2accesstoken \
+    --password-stdin \
+    "${BASE_REPO}"
+
+function checkChartVersion() {
+    local repo=${1/#"oci://"} # removes the oci prefix from repo
+    local tag=$2
+
+    gcloud artifacts docker tags list "${repo}" --format="value(tag)" | grep -Fx "${tag}"
+}
+
+echo "Checking if chart version [${VERSION}] is already present in the repo"
+
+if checkChartVersion "$HELM_REPO" "$VERSION"
+then
+    echo "Chart version [${VERSION}] is already present in the repo, please bump the version in [Chart.yaml] first"
+    exit 1
+else
+    echo "Chart version [${VERSION}] not found on the repo"
+fi
+
+echo "Pushing the chart to repo"
+helm push "${FILE_NAME}" "${HELM_REPO}"

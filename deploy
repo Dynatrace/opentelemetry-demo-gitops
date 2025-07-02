@@ -1,21 +1,11 @@
 #!/bin/bash
 
-NAMESPACE="opentelemetry-demo"
+NAMESPACE="astroshop"
 
-helm upgrade --install dapr dapr/dapr \
---version=1.15 \
---namespace dapr-system \
---create-namespace \
---set global.mtls.enabled=false \
---wait
-
-helm upgrade --install astroshop ./charts/opentelemetry-demo \
-    --create-namespace -n ${NAMESPACE} \
-    --atomic --debug \
-    --post-renderer ./hook-ownership \
-    --set default.collectorTenantToken="${DATA_INGEST_TOKEN}" \
-    --set default.collectorTenantEndpoint="${OTEL_INGEST_ENDPOINT}"\
-    --dry-run
-
-
-
+helm upgrade --install astroshop ./charts/astroshop \
+    --create-namespace \
+    --namespace "${NAMESPACE}" \
+    --atomic \
+    -f "./config/helm-values/values.yaml" \
+    --post-renderer "./config/kustomize/base/helm-renderer" \
+    --debug

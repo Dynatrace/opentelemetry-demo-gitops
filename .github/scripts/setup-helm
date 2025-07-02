@@ -1,0 +1,4 @@
+#!/bin/bash
+
+helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
+helm dependency build $CHART_PATH

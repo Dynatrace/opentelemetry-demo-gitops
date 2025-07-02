@@ -1,8 +1,0 @@
-#!/bin/bash
-
-KUSTOMIZE_PATH="config/k8s-labels/ownership/kustomize/ownership-labels"
-
-cd ${KUSTOMIZE_PATH}
-
-cat <&0 > resources.yaml
-kustomize build . && rm resources.yaml
