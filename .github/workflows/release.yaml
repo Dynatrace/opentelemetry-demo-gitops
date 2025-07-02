@@ -8,7 +8,7 @@ on:
       - charts/**
 
 jobs:
-  validate-pr:
+  release:
     uses: ./.github/workflows/build-and-push.yaml
     with:
       push: true
