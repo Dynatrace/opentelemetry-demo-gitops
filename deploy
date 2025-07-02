@@ -6,9 +6,6 @@ helm upgrade --install astroshop ./charts/astroshop \
     --create-namespace \
     --namespace "${NAMESPACE}" \
     --atomic \
-    --set components.ingress.enabled=false \
-    --set components.dt-credentials.enabled=true \
-    --set components.dt-credentials.tenantToken="${DATA_INGEST_TOKEN}" \
-    --set components.dt-credentials.tenantEndpoint="${OTEL_INGEST_ENDPOINT}"\
+    -f "./config/helm-values/values.yaml" \
     --post-renderer "./config/kustomize/base/helm-renderer" \
     --debug
