@@ -209,6 +209,7 @@ opentelemetry-demo:
           useDefault:
             env: false
     load-generator:
+      replicas: 2
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "python"
