@@ -3,6 +3,7 @@ default:
   postgresql_db: postgres
   postgresql_password: example
   postgresql_host: product-db
+  postgresql_port: 5432
 
 components:
   dt-credentials:
@@ -39,7 +40,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop-rds-and-payment-merge
-      tag: 018408c
+      tag: ffc8937
   components:
     accounting:
       podAnnotations:
@@ -255,11 +256,6 @@ opentelemetry-demo:
       # image: 'hrexed/demo:latest-product-catalog'
       podAnnotations:
         metadata.dynatrace.com/process.technology: "go"
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "product-catalog"
-        dapr.io/app-port: "8080"
-        dapr.io/enable-api-logging: "true"
-        dapr.io/config: "app-config"
       envOverrides:
         - name: DT_LOGLEVELCON # https://www.dynatrace.com/support/help/shortlink/agent-logging
           value: "" # info
@@ -269,10 +265,31 @@ opentelemetry-demo:
           value: "" # stdout
         - name: DT_LOGGING_GO_FLAGS
           value: "" # Exporter=true,SpanProcessor=true,Propagator=true,Core=true
-      # additionalVolumes:
-      #   - name: volume
-      #     persistentVolumeClaim:
-      #       claimName: product-catalog-storage
+        - name: POSTGRES_HOST
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres_host
+        - name: POSTGRES_PORT
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres_port
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres_user        
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres_password
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres_db
       resources:
         limits:
           memory: 512Mi
