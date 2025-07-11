@@ -30,7 +30,7 @@ spec:
       labels:
         app: postgres
     spec:
-      serviceAccountName: {{ include "otel-demo.serviceAccountName" ( index .Subcharts "opentelemetry-demo") }}
+      serviceAccountName: {{ include "otel-demo.serviceAccountName" (index .Subcharts "opentelemetry-demo") }}
       containers:
         - name: product-db
           image: {{ index .Values "components" "product-db" "image" | quote }}

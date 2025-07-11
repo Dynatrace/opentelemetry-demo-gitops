@@ -1,0 +1,28 @@
+# Ref.: https://docs.dynatrace.com/docs/observe/infrastructure-monitoring/container-platform-monitoring/kubernetes-monitoring/leverage-tags-defined-in-kubernetes-deployments#viewer
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: "{{ .Release.Namespace }}"
+  name: dynatrace-oneagent-metadata-viewer
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "pods"
+    verbs:
+      - "get"
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dynatrace-oneagent-metadata-viewer-binding
+  namespace: "{{ .Release.Namespace }}"
+subjects:
+  - kind: ServiceAccount
+    name: '{{ include "otel-demo.serviceAccountName" (index .Subcharts "opentelemetry-demo") }}'
+    apiGroup: ""
+roleRef:
+  kind: Role
+  name: dynatrace-oneagent-metadata-viewer
+  apiGroup: ""
