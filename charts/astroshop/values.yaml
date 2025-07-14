@@ -426,30 +426,34 @@ opentelemetry-demo:
           traces:
             span:
               - |
-                resource.attributes["service.name"] == "checkoutservice" or
-                resource.attributes["service.name"] == "paymentservice" or
-                resource.attributes["service.name"] == "productcatalogservice" or
-                IsMatch(resource.attributes["host.name"], ".*productcatalogservice.*")
+                resource.attributes["service.name"] == "checkout" or
+                resource.attributes["service.name"] == "frontend" or
+                resource.attributes["service.name"] == "payment" or
+                resource.attributes["service.name"] == "product-catalog" or
+                IsMatch(resource.attributes["host.name"], ".*product-catalog.*")
             spanevent:
               - |
-                resource.attributes["service.name"] == "checkoutservice" or
-                resource.attributes["service.name"] == "paymentservice" or
-                resource.attributes["service.name"] == "productcatalogservice" or
-                IsMatch(resource.attributes["host.name"], ".*productcatalogservice.*")
+                resource.attributes["service.name"] == "checkout" or
+                resource.attributes["service.name"] == "frontend" or
+                resource.attributes["service.name"] == "payment" or
+                resource.attributes["service.name"] == "product-catalog" or
+                IsMatch(resource.attributes["host.name"], ".*product-catalog.*")
           metrics:
             metric:
               - |
-                resource.attributes["service.name"] == "checkoutservice" or
-                resource.attributes["service.name"] == "paymentservice" or
-                resource.attributes["service.name"] == "productcatalogservice" or
-                IsMatch(resource.attributes["host.name"], ".*productcatalogservice.*")
+                resource.attributes["service.name"] == "checkout" or
+                resource.attributes["service.name"] == "frontend" or
+                resource.attributes["service.name"] == "payment" or
+                resource.attributes["service.name"] == "product-catalog" or
+                IsMatch(resource.attributes["host.name"], ".*product-catalog.*")
           logs:
             log_record:
               - |
-                resource.attributes["service.name"] == "checkoutservice" or
-                resource.attributes["service.name"] == "paymentservice" or
-                resource.attributes["service.name"] == "productcatalogservice" or
-                IsMatch(resource.attributes["host.name"], ".*productcatalogservice.*")
+                resource.attributes["service.name"] == "checkout" or
+                resource.attributes["service.name"] == "frontend" or
+                resource.attributes["service.name"] == "payment" or
+                resource.attributes["service.name"] == "product-catalog" or
+                IsMatch(resource.attributes["host.name"], ".*product-catalog.*")
         transform:
           error_mode: ignore
           trace_statements:
