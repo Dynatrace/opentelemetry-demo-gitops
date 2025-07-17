@@ -6,4 +6,3 @@ resources:
 
 components:
   - ../components/flagd-config
-  - ../components/tmp-volume
