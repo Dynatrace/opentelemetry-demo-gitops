@@ -1,7 +1,7 @@
 #!/bin/bash
 
-VERSION="1.15"
-NAMESPACE="dapr-system"
+VERSION="${VERSION:-"1.15"}"
+NAMESPACE="${NAMESPACE:-"dapr-system"}"
 
 helm upgrade --install dapr dapr \
     --repo https://dapr.github.io/helm-charts/ \

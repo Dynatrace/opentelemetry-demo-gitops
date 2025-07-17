@@ -1,14 +1,16 @@
 #!/bin/bash
 
-NAMESPACE="ingress-nginx"
+VERSION="${VERSION:-"4.13"}"
+NAMESPACE="${NAMESPACE:-"ingress-nginx"}"
 
 
 # Ref.: https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/guides/deployment-and-configuration/monitoring-and-instrumentation/instrument-nginx
 
-helm template ingress-nginx ingress-nginx \
+helm upgrade --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --atomic \
-    --namespace ingress-nginx \
+    --namespace "${NAMESPACE}" \
     --create-namespace \
+    --version "$VERSION" \
     --set controller.config.main-snippet="load_module /opt/dynatrace/oneagent-paas/agent/bin/current/linux-musl-x86-64/liboneagentnginx.so;" \
     --set controller.service.externalTrafficPolicy="Local"
