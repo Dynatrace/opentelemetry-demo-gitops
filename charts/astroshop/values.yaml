@@ -145,6 +145,11 @@ opentelemetry-demo:
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "ruby"
+      resources:
+        requests:
+          memory: 512Mi
+        limits:
+          memory: 512Mi        
     flagd:
       podAnnotations:
         dynatrace.com/inject: "false"
@@ -223,9 +228,9 @@ opentelemetry-demo:
           value: "true"
       resources:
         requests:
-          memory: 2Gi
+          memory: 3Gi
         limits:
-          memory: 2Gi
+          memory: 3Gi
     payment:
       podAnnotations:
         metadata.dynatrace.com/process.technology: "nodejs"
@@ -346,6 +351,11 @@ opentelemetry-demo:
             port: 9121
           useDefault:
             env: false
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          memory: 512Mi            
 
   opensearch:
     podAnnotations:
