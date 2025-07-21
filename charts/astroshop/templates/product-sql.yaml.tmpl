@@ -1,3 +1,4 @@
+{{- if  index .Values "components" "product-db" "enabled" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -44,17 +45,17 @@ spec:
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-credentials
                   key: postgres_user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-credentials
                   key: postgres_password
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secret
+                  name: postgres-credentials
                   key: postgres_db
 
           volumeMounts:
@@ -65,3 +66,4 @@ spec:
         - name: init-statement
           configMap:
             name: db-config
+{{- end }}

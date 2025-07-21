@@ -23,6 +23,10 @@ components:
     ipWhitelist:
       base: []
       extra: []
+  postgres-credentials:
+    enabled: true
+    #when enabled secret with name `postgres-credentials` will be cerated automatically from values in `default` section.
+    #set do dsiabled if you want to provide  those values in other way
   product-db:
     enabled: true
     image: "postgres:15.1"
@@ -273,27 +277,27 @@ opentelemetry-demo:
         - name: POSTGRES_HOST
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-credentials
               key: postgres_host
         - name: POSTGRES_PORT
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-credentials
               key: postgres_port
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-credentials
               key: postgres_user        
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-credentials
               key: postgres_password
         - name: POSTGRES_DB
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-credentials
               key: postgres_db
       resources:
         limits:
