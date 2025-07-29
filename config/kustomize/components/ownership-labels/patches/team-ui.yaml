@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder
+  labels:
+    astroshop.org/owner: &name Team-UI
+spec:
+  template:
+    metadata:
+      labels:
+        astroshop.org/owner: *name
