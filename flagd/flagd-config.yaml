@@ -96,7 +96,7 @@ data:
           "variants": {
             "on": {
               "visa": "Visa",
-              "mastercard": "Mastercard",
+              "mastercard": "Mastercard"
             },
             "off": {
               "visa": "Visa",
