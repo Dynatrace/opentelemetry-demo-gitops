@@ -97,7 +97,6 @@ data:
             "on": {
               "visa": "Visa",
               "mastercard": "Mastercard",
-              "american_express": "American Express"
             },
             "off": {
               "visa": "Visa",
@@ -130,14 +129,11 @@ data:
     }
 kind: ConfigMap
 metadata:
-  annotations:
-    meta.helm.sh/release-name: astroshop
-    meta.helm.sh/release-namespace: astroshop
   labels:
     app.kubernetes.io/instance: astroshop
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: opentelemetry-demo
-    app.kubernetes.io/version: 2.0.1
-    helm.sh/chart: opentelemetry-demo-0.36.4
+    app.kubernetes.io/version: 2.0.2
+    helm.sh/chart: opentelemetry-demo-0.37.0
   name: flagd-config
   namespace: astroshop
