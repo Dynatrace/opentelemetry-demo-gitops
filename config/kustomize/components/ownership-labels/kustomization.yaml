@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+patches:
+  - path: ./patches/team-backend-services.yaml
+    target:
+      kind: Deployment
+      name: (flagd|valkey|load-generator)
+  - path: ./patches/team-business-solutions.yaml
+    target:
+      kind: Deployment
+      name: (ad|kafka|product-catalog|quote)
+  - path: ./patches/team-ecommerce.yaml
+    target:
+      kind: Deployment
+      name: (cart|currency|email|fraud-detection|image-provider|recommendation|shipping)
+  - path: ./patches/team-financial-services.yaml
+    target:
+      kind: Deployment
+      name: (accounting|checkout|payment)
+  - path: ./patches/team-ui.yaml
+    target:
+      kind: Deployment
+      name: frontend
