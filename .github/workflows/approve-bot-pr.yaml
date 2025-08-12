@@ -5,7 +5,7 @@ on:
     types:
       - opened
     paths:
-      - flagd/**
+      - flagd/flagd-config.yaml
 
 jobs:
   approve:
