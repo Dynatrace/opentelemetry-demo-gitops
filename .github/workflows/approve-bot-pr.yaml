@@ -11,7 +11,7 @@ jobs:
   approve:
     name: Auto-approve
     runs-on: ubuntu-22.04
-    if: github.event.pull_request.user.login == 'demoability-dt-bot'
+    if: github.event.pull_request.user.login == 'demoability-bot'
     steps:
       - uses: actions/github-script@v4
         with:
