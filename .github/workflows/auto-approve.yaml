@@ -27,7 +27,7 @@ jobs:
           script: |
             await github.rest.pulls.merge({
               owner: context.repo.owner,
-              repo: cotnext.repo.repo,
+              repo: context.repo.repo,
               pull_number: context.issue.number,
               merge_method: "squash"
             })
