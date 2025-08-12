@@ -11,16 +11,14 @@ jobs:
   approve:
     name: Auto-approve
     runs-on: ubuntu-22.04
+    if: github.event.pull_request.user.login == 'demoability-robot'
     steps:
-      - run: echo ${{ toJson(github.event.pull_request) }}
-    # if: github.event.pull_request.user.login == 'demoability-bot'
-    # steps:
-    #   - uses: actions/github-script@v4
-    #     with:
-    #       script: |
-    #         await github.pulls.createReview({
-    #           owner: context.repo.owner,
-    #           repo: context.repo.repo,
-    #           pull_number: context.issue.number,
-    #           event: "APPROVE"
-    #         })
+      - uses: actions/github-script@v4
+        with:
+          script: |
+            await github.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              event: "APPROVE"
+            })
