@@ -6,3 +6,4 @@ resources:
 
 components:
   - ../components/flagd-config
+  - ../components/ownership-labels
