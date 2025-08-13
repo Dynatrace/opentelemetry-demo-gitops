@@ -43,8 +43,8 @@ components:
 opentelemetry-demo:
   default:
     image:
-      repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop-rds-and-payment-merge
-      tag: adf0a4a
+      repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop
+      tag: 7be95bf
   components:
     accounting:
       podAnnotations:
@@ -153,7 +153,7 @@ opentelemetry-demo:
         requests:
           memory: 512Mi
         limits:
-          memory: 512Mi        
+          memory: 512Mi
     flagd:
       podAnnotations:
         dynatrace.com/inject: "false"
@@ -288,7 +288,7 @@ opentelemetry-demo:
           valueFrom:
             secretKeyRef:
               name: postgres-credentials
-              key: postgres_user        
+              key: postgres_user
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -359,7 +359,7 @@ opentelemetry-demo:
         limits:
           memory: 512Mi
         requests:
-          memory: 512Mi            
+          memory: 512Mi
 
   opensearch:
     podAnnotations:
