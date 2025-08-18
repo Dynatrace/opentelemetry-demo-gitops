@@ -129,11 +129,11 @@ data:
     }
 kind: ConfigMap
 metadata:
+  name: flagd-config
+  namespace: astroshop
   labels:
     app.kubernetes.io/instance: astroshop
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: opentelemetry-demo
     app.kubernetes.io/version: 2.0.2
     helm.sh/chart: opentelemetry-demo-0.37.0
-  name: flagd-config
-  namespace: astroshop
