@@ -11,9 +11,16 @@ spec:
     spec:
       serviceAccountName: flagd-restart-sa
       containers:
-      - name: restart
-        image: bitnami/kubectl:latest
-        command: ["kubectl", "delete", "pod", "-l", "app.kubernetes.io/component=flagd"]
+        - name: restart
+          image: bitnami/kubectl:latest
+          command:
+            [
+              "kubectl",
+              "delete",
+              "pod",
+              "-l",
+              "app.kubernetes.io/component=flagd",
+            ]
       restartPolicy: Never
 ---
 apiVersion: v1
@@ -34,9 +41,9 @@ metadata:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 rules:
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["delete", "get", "list"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["delete", "get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -47,9 +54,9 @@ metadata:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 subjects:
-- kind: ServiceAccount
-  name: flagd-restart-sa
-  namespace: astroshop
+  - kind: ServiceAccount
+    name: flagd-restart-sa
+    namespace: astroshop
 roleRef:
   kind: Role
   name: flagd-restart-role
