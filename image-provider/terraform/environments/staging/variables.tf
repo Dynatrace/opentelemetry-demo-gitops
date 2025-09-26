@@ -25,5 +25,5 @@ variable "lambda_layer_arn" {
 variable "lambda_monitoring_secret_name" {
   description = "The name of the Lambda monitoring secret"
   type        = string
-  default     = "lambda-monitoring-${var.environment}"
+  default     = "lambda-monitoring-staging"
 }
