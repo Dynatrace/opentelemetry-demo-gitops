@@ -2,3 +2,7 @@
 resources.yaml
 charts/**/charts
 *.tgz
+
+node_modules
+build
+.terraform
