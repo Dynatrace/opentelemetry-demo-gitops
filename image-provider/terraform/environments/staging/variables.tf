@@ -27,3 +27,8 @@ variable "lambda_monitoring_secret_name" {
   type        = string
   default     = "lambda-monitoring-staging"
 }
+variable "private_subnet_name" {
+  description = "The name of the private subnet to lambda resources in"
+  type        = string
+  default     = "private-subnet-1"
+}

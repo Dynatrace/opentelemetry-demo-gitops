@@ -44,4 +44,5 @@ module "image_processing" {
   image_resize_problem_flag     = var.image_resize_problem_flag
   lambda_layer_arn              = var.lambda_layer_arn
   lambda_monitoring_secret_name = var.lambda_monitoring_secret_name
+  private_subnet_name           = var.private_subnet_name
 }
