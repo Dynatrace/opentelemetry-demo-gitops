@@ -37,10 +37,11 @@ provider "aws" {
 }
 
 module "image_processing" {
-  source                    = "../../modules/image-processing"
-  environment               = var.environment
-  aws_region                = var.aws_region
-  stage_name                = var.stage
-  image_resize_problem_flag = var.image_resize_problem_flag
-  lambda_layer_arn          = var.lambda_layer_arn
+  source                        = "../../modules/image-processing"
+  environment                   = var.environment
+  aws_region                    = var.aws_region
+  stage_name                    = var.stage
+  image_resize_problem_flag     = var.image_resize_problem_flag
+  lambda_layer_arn              = var.lambda_layer_arn
+  lambda_monitoring_secret_name = var.lambda_monitoring_secret_name
 }

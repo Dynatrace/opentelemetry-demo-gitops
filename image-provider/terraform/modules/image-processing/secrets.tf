@@ -1,5 +1,5 @@
 data "aws_secretsmanager_secret" "this" {
-  name = "lambda-monitoring-${var.environment}"
+  name = var.lambda_monitoring_secret_name
 }
 
 data "aws_secretsmanager_secret_version" "this" {

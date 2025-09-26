@@ -79,14 +79,7 @@ resource "aws_iam_role_policy" "access_vpc_execution_role" {
   })
 }
 
-resource "aws_iam_policy_attachment" "secrets_manager_read_write" {
-  name       = "SecretsManagerReadWrite"
-  roles      = [aws_iam_role.this.name]
-  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
-}
-
-resource "aws_iam_policy_attachment" "dynamodb_read_only_access" {
-  name       = "AmazonDynamoDBReadOnlyAccess"
-  roles      = [aws_iam_role.this.name]
+resource "aws_iam_role_policy_attachment" "dynamodb_read_only_access" {
+  role       = aws_iam_role.this.id
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
 }

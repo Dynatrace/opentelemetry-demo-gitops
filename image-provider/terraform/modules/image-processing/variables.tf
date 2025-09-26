@@ -22,3 +22,7 @@ variable "lambda_layer_arn" {
   type        = string
   description = "The ARN of the Lambda layer used for monitoring"
 }
+variable "lambda_monitoring_secret_name" {
+  type        = string
+  description = "The name of the Lambda monitoring secret"
+}
