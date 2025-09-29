@@ -1,5 +1,5 @@
 data "aws_subnet" "this" {
   tags = {
-    Name = "private-subnet-1"
+    Name = var.private_subnet_name
   }
 }
