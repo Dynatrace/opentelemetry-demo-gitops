@@ -15,9 +15,7 @@
 
 ### Secrets
 
-Firstly, go to your Dynatrace tenant, then go to the **Access Tokens** app and create new token. Make sure that it has **openTelemetryTrace.ingest** scope.
-
-Then, go to **Deploy OneAgent** app, select **AWS Lambda**, enable **Traces and Logs**, click **Create token**, select **x86 architecture**, select **Configure with environment variables** and choose the right **region**.
+Firstly, go to your Dynatrace tenant, then go to **Deploy OneAgent** app, select **AWS Lambda**, enable **Traces and Logs**, click **Create token**, select **x86 architecture**, select **Configure with environment variables** and choose the right **region**.
 
 Fill this json with your data:
 
@@ -28,8 +26,6 @@ Fill this json with your data:
   "DT_URL": "", # DT_CONNECTION_BASE_URL
   "DT_CONNECTION_AUTH_TOKEN": "",
   "DT_LOG_COLLECTION_AUTH_TOKEN": "",
-  "DT_OTEL_COLLECTOR_TOKEN": "", # Access token with Opentelemetry ingest scope
-  "DT_FLUENT_BIT_URI": "/api/v2/logs/ingest?api-token=<token>" # replace token with the one from DT_LOG_COLLECTION_AUTH_TOKEN
 }
 ```
 

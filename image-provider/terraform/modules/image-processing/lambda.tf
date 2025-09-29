@@ -21,11 +21,11 @@ resource "aws_lambda_function" "this" {
       OTEL_SERVICE_NAME : "lambda-image-resizer"
       BUCKET : "${aws_s3_bucket.this.bucket}"
       DYNAMODB_TABLE_NAME : aws_dynamodb_table.this.name
-      DT_TENANT : local.dynatrace_tenant
-      DT_CLUSTER_ID : local.dt_cluster_id
-      DT_CONNECTION_BASE_URL : local.dt_connection_base_url
-      DT_CONNECTION_AUTH_TOKEN : local.dt_connection_auth_token
-      DT_LOG_COLLECTION_AUTH_TOKEN : local.dt_log_collection_auth_token
+      DT_TENANT : var.dynatrace_tenant
+      DT_CLUSTER_ID : var.dt_cluster_id
+      DT_CONNECTION_BASE_URL : var.dt_connection_base_url
+      DT_CONNECTION_AUTH_TOKEN : var.dt_connection_auth_token
+      DT_LOG_COLLECTION_AUTH_TOKEN : var.dt_log_collection_auth_token
     }
   }
 
