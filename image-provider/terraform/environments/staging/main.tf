@@ -37,12 +37,20 @@ provider "aws" {
 }
 
 module "image_processing" {
-  source                        = "../../modules/image-processing"
-  environment                   = var.environment
-  aws_region                    = var.aws_region
-  stage_name                    = var.stage
-  image_resize_problem_flag     = var.image_resize_problem_flag
-  lambda_layer_arn              = var.lambda_layer_arn
+  source                       = "../../modules/image-processing"
+  environment                  = local.environment
+  aws_region                   = var.aws_region
+  image_resize_problem_flag    = var.image_resize_problem_flag
+  lambda_layer_arn             = local.lambda_layer_arn
+  private_subnet_name          = var.private_subnet_name
+  dynatrace_tenant             = module.secrets.dynatrace_tenant
+  dt_cluster_id                = module.secrets.dt_cluster_id
+  dt_connection_base_url       = module.secrets.dt_connection_base_url
+  dt_connection_auth_token     = module.secrets.dt_connection_auth_token
+  dt_log_collection_auth_token = module.secrets.dt_log_collection_auth_token
+}
+
+module "secrets" {
+  source                        = "../../modules/secrets"
   lambda_monitoring_secret_name = var.lambda_monitoring_secret_name
-  private_subnet_name           = var.private_subnet_name
 }
