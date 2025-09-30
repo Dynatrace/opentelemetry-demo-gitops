@@ -1,12 +1,11 @@
-// utils/resize.js
-const { trace } = require('@opentelemetry/api');
+const { trace } = require("@opentelemetry/api");
 
-const tracer = trace.getTracer('resize-image');
+const tracer = trace.getTracer("resize-image");
 
 async function resizeImage(buffer, width = 300) {
-  return await tracer.startActiveSpan('resizeImage', async (span) => {
+  return await tracer.startActiveSpan("resizeImage", async (span) => {
     try {
-      //await new Promise((r) => setTimeout(r, 6000));
+      await new Promise((r) => setTimeout(r, 6000));
       span.setStatus({ code: 1 });
       return buffer;
     } catch (err) {
