@@ -36,10 +36,17 @@ variable "dt_connection_base_url" {
 variable "dt_connection_auth_token" {
   type        = string
   description = "The Dynatrace connection auth token"
+  sensitive   = true
 }
 
 variable "dt_log_collection_auth_token" {
   type        = string
   description = "The Dynatrace log collection auth token"
+  sensitive   = true
+}
+
+variable "aws_account_id" {
+  type        = string
+  description = "The AWS account ID"
 }
 

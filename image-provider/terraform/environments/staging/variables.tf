@@ -8,13 +8,3 @@ variable "image_resize_problem_flag" {
   type        = bool
   default     = false
 }
-variable "lambda_monitoring_secret_name" {
-  description = "The name of the Lambda monitoring secret"
-  type        = string
-  default     = "lambda-monitoring-staging"
-}
-variable "private_subnet_name" {
-  description = "The name of the private subnet to lambda resources in"
-  type        = string
-  default     = "private-subnet-1"
-}

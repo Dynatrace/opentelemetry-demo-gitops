@@ -44,12 +44,12 @@ resource "aws_iam_role_policy" "lambda_basic_execution" {
     Statement = [
       {
         Effect : "Allow"
-        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:*"
+        Resource = "arn:aws:logs:${var.aws_region}:${var.aws_account_id}:*"
         Action   = "logs:CreateLogGroup"
       },
       {
         Effect : "Allow"
-        Resource = "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/${aws_lambda_function.this.function_name}:*"
+        Resource = "arn:aws:logs:${var.aws_region}:${var.aws_account_id}:log-group:/aws/lambda/${aws_lambda_function.this.function_name}:*"
         Action = [
           "logs:CreateLogStream",
           "logs:PutLogEvents"

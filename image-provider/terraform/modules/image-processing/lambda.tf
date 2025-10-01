@@ -12,7 +12,7 @@ resource "aws_lambda_function" "this" {
   filename         = data.archive_file.this.output_path
   source_code_hash = filebase64sha256(data.archive_file.this.output_path)
   memory_size      = 512
-  timeout          = 5
+  timeout          = 10
 
   environment {
     variables = {
