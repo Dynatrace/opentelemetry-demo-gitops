@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "this" {
-  bucket = "astroshop-image-provider-staging"
+  bucket = local.name_prefix
 
   force_destroy = true
 }

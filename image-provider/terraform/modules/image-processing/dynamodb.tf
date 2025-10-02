@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "this" {
-  name         = "astroshop-${var.environment}-products"
+  name         = "${local.name_prefix}-products"
   hash_key     = "id"
   billing_mode = "PAY_PER_REQUEST"
 

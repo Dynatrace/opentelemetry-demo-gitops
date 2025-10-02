@@ -1,5 +1,5 @@
 resource "aws_security_group" "this" {
-  name        = "astroshop-${var.environment}-image-processing"
+  name        = local.name_prefix
   description = "Allows image processing to access the internet"
   vpc_id      = data.aws_subnet.this.vpc_id
 }
