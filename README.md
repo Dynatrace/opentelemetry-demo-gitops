@@ -42,6 +42,21 @@ then run
 ```bash
 ./deploy
 ```
+
+#### Overlays
+
+If you want to deploy a version with extra features can use one of the overlays
+
+```bash
+./deploy {overlay-name}
+```
+
+##### AWS lambda image provider
+
+You can read more about it [here](./image-provider/)
+
+Once you've deployed the infrastructure you need to take the lambda url and set it in the [patch file](./config/kustomize/overlays/image-provider/patches/frontend-env.yaml)
+
 # Flagd configuration change: problem patterns
 
 ## About

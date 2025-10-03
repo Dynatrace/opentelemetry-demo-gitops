@@ -5,7 +5,7 @@ data "archive_file" "this" {
 }
 
 resource "aws_lambda_function" "this" {
-  function_name    = "astroshop-image-provider-${var.environment}"
+  function_name    = local.name_prefix
   role             = aws_iam_role.this.arn
   runtime          = "nodejs22.x"
   handler          = "index.handler"

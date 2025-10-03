@@ -1,5 +1,5 @@
 resource "aws_iam_role" "this" {
-  name = "astroshop-${var.environment}-image-provider"
+  name = local.name_prefix
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -16,7 +16,7 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy" "access_s3_bucket" {
-  name = "astroshop-${var.environment}-image-provider-access-s3-bucket"
+  name = "${local.name_prefix}-access-s3-bucket"
   role = aws_iam_role.this.id
 
   policy = jsonencode({
@@ -36,7 +36,7 @@ resource "aws_iam_role_policy" "access_s3_bucket" {
 }
 
 resource "aws_iam_role_policy" "lambda_basic_execution" {
-  name = "astroshop-${var.environment}-image-provider-lambda-basic-execution"
+  name = "${local.name_prefix}-lambda-basic-execution"
   role = aws_iam_role.this.id
 
   policy = jsonencode({
@@ -60,7 +60,7 @@ resource "aws_iam_role_policy" "lambda_basic_execution" {
 }
 
 resource "aws_iam_role_policy" "access_vpc_execution_role" {
-  name = "astroshop-${var.environment}-image-provider-access-vpc-execution-role"
+  name = "${local.name_prefix}-access-vpc-execution-role"
   role = aws_iam_role.this.id
 
   policy = jsonencode({

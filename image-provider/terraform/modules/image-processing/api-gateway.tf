@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_api" "this" {
-  name          = "astroshop-image-provider-${var.environment}"
+  name          = local.name_prefix
   protocol_type = "HTTP"
 
   cors_configuration {
