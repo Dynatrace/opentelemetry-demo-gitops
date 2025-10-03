@@ -29,7 +29,7 @@ The values can be supplied by variables/locals or by the use of the `secrets` mo
 ```json
 {
   "DT_TENANT": "",
-  "DT_CLUSTER_ID": "",
+  "DT_CLUSTER": "",
   "DT_CONNECTION_BASE_URL": "",
   "DT_CONNECTION_AUTH_TOKEN": "",
   "DT_LOG_COLLECTION_AUTH_TOKEN": ""
