@@ -1,10 +1,3 @@
-default:
-  postgresql_user: postgres
-  postgresql_db: postgres
-  postgresql_password: example
-  postgresql_host: product-db
-  postgresql_port: 5432
-
 components:
   dt-credentials:
     # when enabled it requires the `tenantEndpoint` and `tenantToken` values to be set
@@ -24,21 +17,12 @@ components:
       base: []
       extra: []
   postgres-credentials:
+    # when enabled, secret with name `postgres-credentials` will be created
+    # set do disabled if you want to provide those values in other way
     enabled: true
-    #when enabled secret with name `postgres-credentials` will be cerated automatically from values in `default` section.
-    #set do dsiabled if you want to provide  those values in other way
-  product-db:
-    enabled: true
-    image: "postgres:15.1"
-    useDefault:
-      env: false
-    replicas: 1
-    ports:
-      - protocol: TCP
-        port: 5432
-        appProtocol: tcp
-        targetPort: 5432
-        name: sql
+    # these are default values for otel postgresql service
+    # if there are any changes to the db setup make sure they are reflected here
+    connectionString: postgresql://otelu:otelp@postgresql:5432/otel
 
 opentelemetry-demo:
   default:
@@ -95,11 +79,6 @@ opentelemetry-demo:
     cart:
       podAnnotations:
         metadata.dynatrace.com/process.technology: ".NET"
-        dapr.io/enabled: "true"
-        dapr.io/app-id: "cart"
-        dapr.io/app-port: "8080"
-        dapr.io/enable-api-logging: "true"
-        dapr.io/config: "app-config"
       envOverrides:
         - name: DT_LOGLEVELCON # https://www.dynatrace.com/support/help/shortlink/agent-logging
           value: "" # info
@@ -262,7 +241,6 @@ opentelemetry-demo:
           memory: 512Mi
 
     product-catalog:
-      # image: 'hrexed/demo:latest-product-catalog'
       podAnnotations:
         metadata.dynatrace.com/process.technology: "go"
       envOverrides:
@@ -274,31 +252,11 @@ opentelemetry-demo:
           value: "" # stdout
         - name: DT_LOGGING_GO_FLAGS
           value: "" # Exporter=true,SpanProcessor=true,Propagator=true,Core=true
-        - name: POSTGRES_HOST
+        - name: PRODUCT_CATALOG_DB_CONNECTION
           valueFrom:
             secretKeyRef:
               name: postgres-credentials
-              key: postgres_host
-        - name: POSTGRES_PORT
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: postgres_port
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: postgres_user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: postgres_password
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: postgres-credentials
-              key: postgres_db
+              key: connection_string
       resources:
         limits:
           memory: 512Mi
@@ -336,6 +294,12 @@ opentelemetry-demo:
       resources:
         limits:
           memory: 1024Mi
+    postgresql:
+      resources:
+        requests:
+          memory: 100Mi
+        limits:
+          memory: 100Mi
     valkey-cart:
       ports:
         - name: valkey-cart
