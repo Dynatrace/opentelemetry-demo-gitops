@@ -16,8 +16,8 @@ components:
     ipWhitelist:
       base: []
       extra: []
-  postgres-credentials:
-    # when enabled, secret with name `postgres-credentials` will be created
+  product-db-connection:
+    # when enabled, secret with name `product-db-connection` will be created
     # set to disabled if you want to provide those values in other way
     enabled: true
     # these are default values for otel postgresql service
@@ -28,7 +28,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop
-      tag: 759501f
+      tag: 237cf09
   components:
     # ---------------------------------------------------
     accounting:
@@ -208,7 +208,7 @@ opentelemetry-demo:
         - name: PRODUCT_CATALOG_DB_CONNECTION
           valueFrom:
             secretKeyRef:
-              name: postgres-credentials
+              name: product-db-connection
               key: connection_string
       resources:
         limits:
