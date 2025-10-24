@@ -44,7 +44,11 @@ opentelemetry-demo:
         - name: OTEL_METRICS_EXPORTER
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
+        requests:
+          cpu: 25m
+          memory: 256Mi
         limits:
+          cpu: 250m
           memory: 512Mi
     # ---------------------------------------------------
     ad:
@@ -60,7 +64,11 @@ opentelemetry-demo:
         - name: OTEL_METRICS_EXPORTER
           value: "console,otlp" # 'console', 'none', 'otlp
       resources:
+        requests:
+          cpu: 25m # 100
+          memory: 256Mi
         limits:
+          cpu: 250m # 100
           memory: 512Mi
     # ---------------------------------------------------
     cart:
@@ -76,7 +84,11 @@ opentelemetry-demo:
         - name: OTEL_METRICS_EXPORTER
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
+        requests:
+          cpu: 25m
+          memory: 256Mi
         limits:
+          cpu: 250m
           memory: 512Mi
     # ---------------------------------------------------
     checkout:
@@ -90,13 +102,24 @@ opentelemetry-demo:
         - name: OTEL_METRICS_EXPORTER
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
+        requests:
+          cpu: 25m
+          memory: 64Mi
         limits:
+          cpu: 250m
           memory: 512Mi
     # ---------------------------------------------------
     currency:
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "cpp"
+      resources:
+        requests:
+          cpu: 25m
+          memory: 32Mi
+        limits:
+          cpu: 250m
+          memory: 32Mi
     # ---------------------------------------------------
     email:
       podAnnotations:
@@ -104,8 +127,10 @@ opentelemetry-demo:
         metadata.dynatrace.com/process.technology: "ruby"
       resources:
         requests:
+          cpu: 25m
           memory: 512Mi
         limits:
+          cpu: 250m
           memory: 512Mi
     # ---------------------------------------------------
     flagd:
@@ -113,13 +138,24 @@ opentelemetry-demo:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "flagd"
       resources:
+        requests:
+          cpu: 25m
+          memory: 300Mi
         limits:
+          cpu: 250m
           memory: 300Mi
     # ---------------------------------------------------
     fraud-detection:
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "Java"
+      resources:
+        requests:
+          cpu: 25m #100
+          memory: 300Mi
+        limits:
+          cpu: 250m
+          memory: 300Mi
     # ---------------------------------------------------
     frontend:
       podAnnotations:
@@ -140,8 +176,16 @@ opentelemetry-demo:
         - name: NEXT_OTEL_VERBOSE
           value: "0" # This expects users to use `kubectl port-forward ...`
       resources:
+        requests:
+          cpu: 500m
+          memory: 300Mi
         limits:
+          cpu: "1"
           memory: 512Mi
+    # ---------------------------------------------------
+    frontend-proxy:
+      # disable frontend proxy since we're using nginx ingress
+      enabled: false
     # ---------------------------------------------------
     image-provider:
       podAnnotations:
@@ -164,6 +208,13 @@ opentelemetry-demo:
             port: 9113
           useDefault:
             env: false
+      resources:
+        requests:
+          cpu: 25m
+          memory: 64Mi
+        limits:
+          cpu: 250m
+          memory: 64Mi
     # ---------------------------------------------------
     load-generator:
       replicas: 2
@@ -179,9 +230,11 @@ opentelemetry-demo:
           value: "true"
       resources:
         requests:
-          memory: 3Gi
+          cpu: "1"
+          memory: 2.5Gi
         limits:
-          memory: 3Gi
+          cpu: "2"
+          memory: 2.5Gi
     # ---------------------------------------------------
     payment:
       podAnnotations:
@@ -198,7 +251,11 @@ opentelemetry-demo:
         - name: NODE_OPTIONS
           value: "" # - do not instrument at all with things like '-r ./Instrumentation.js' Avoid duplicate spans from OA and Otel - https://opentelemetry.io/docs/zero-code/js/
       resources:
+        requests:
+          cpu: 25m
+          memory: 128Mi
         limits:
+          cpu: 250m
           memory: 512Mi
     # ---------------------------------------------------
     product-catalog:
@@ -211,6 +268,9 @@ opentelemetry-demo:
               name: product-db-connection
               key: connection_string
       resources:
+        requests:
+          cpu: 25m
+          memory: 64Mi
         limits:
           memory: 512Mi
     # ---------------------------------------------------
@@ -221,16 +281,37 @@ opentelemetry-demo:
       envOverrides:
         - name: OTEL_PHP_AUTOLOAD_ENABLED
           value: "true"
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 50m
+          memory: 64Mi
     # ---------------------------------------------------
     recommendation:
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "python"
+      resources:
+        requests:
+          cpu: 25m
+          memory: 64Mi
+        limits:
+          cpu: 250m
+          memory: 64Mi
     # ---------------------------------------------------
     shipping:
       podAnnotations:
         dynatrace.com/inject: "false"
         metadata.dynatrace.com/process.technology: "rust"
+      resources:
+        requests:
+          cpu: 25m
+          memory: 64Mi
+        limits:
+          cpu: 250m
+          memory: 64Mi
     # ---------------------------------------------------
     kafka:
       podAnnotations:
@@ -239,14 +320,20 @@ opentelemetry-demo:
         - name: KAFKA_OPTS
           value: "-Dotel.jmx.target.system=kafka-broker"
       resources:
+        requests:
+          cpu: 25m
+          memory: 512Mi
         limits:
+          cpu: 250m
           memory: 1024Mi
     # ---------------------------------------------------
     postgresql:
       resources:
         requests:
+          cpu: 25m
           memory: 100Mi
         limits:
+          cpu: 250m
           memory: 100Mi
     # ---------------------------------------------------
     valkey-cart:
@@ -269,15 +356,17 @@ opentelemetry-demo:
           useDefault:
             env: false
       resources:
-        limits:
-          memory: 512Mi
         requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 50m
           memory: 512Mi
   ### ---------------------------------------------------
   opensearch:
     podAnnotations:
       metadata.dynatrace.com/process.technology: "elasticsearch"
-    enabled: true
+    enabled: false
   ### ---------------------------------------------------
   opentelemetry-collector:
     nameOverride: "otel-gateway-collector"
@@ -285,7 +374,11 @@ opentelemetry-demo:
     podAnnotations:
       dynatrace.com/inject: "false"
     resources:
+      requests:
+        cpu: 25m
+        memory: 128Mi
       limits:
+        cpu: 250m
         memory: 512Mi
     config:
       exporters:
