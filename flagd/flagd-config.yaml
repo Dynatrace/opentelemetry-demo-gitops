@@ -135,5 +135,5 @@ metadata:
     app.kubernetes.io/instance: astroshop
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/part-of: opentelemetry-demo
-    app.kubernetes.io/version: 2.0.2
-    helm.sh/chart: opentelemetry-demo-0.37.0
+    app.kubernetes.io/version: 2.1.3
+    helm.sh/chart: opentelemetry-demo-0.38.1

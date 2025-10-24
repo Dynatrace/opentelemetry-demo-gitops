@@ -2,6 +2,7 @@
 resources.yaml
 charts/**/charts
 *.tgz
+internal/*.yaml
 
 node_modules
 build

@@ -2,9 +2,9 @@ apiVersion: v2
 name: astroshop
 description: A Helm chart for Kubernetes
 type: application
-version: 0.2.14
+version: 0.3.3
 appVersion: "2.0.2"
 dependencies:
   - name: opentelemetry-demo
-    version: 0.37.0
+    version: 0.38.1
     repository: https://open-telemetry.github.io/opentelemetry-helm-charts

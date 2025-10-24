@@ -1,10 +1,24 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 BASE_REPO="oci://europe-docker.pkg.dev"
 HELM_REPO="${BASE_REPO}/dynatrace-demoability/helm"
 CHART_PATH="../charts/astroshop"
 
-cd "$CHART_PATH"
+if [ -d "$CHART_PATH" ]
+then
+    cd "$CHART_PATH"
+else
+    echo "Path [${CHART_PATH}] not found"
+    exit 1
+fi
+
+if [ ! -f "Chart.yaml" ]
+then
+    echo "Chart.yaml not found in [$(pwd)]"
+    exit 1
+fi
 
 echo "Cleaning up old packages"
 rm *.tgz
