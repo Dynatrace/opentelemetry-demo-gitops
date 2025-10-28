@@ -1,5 +1,5 @@
 resource "aws_security_group" "this" {
-  name        = local.name_prefix
+  name        = "${local.name_prefix}-sg"
   description = "Allows image processing to access the internet"
   vpc_id      = data.aws_subnet.this.vpc_id
 }
