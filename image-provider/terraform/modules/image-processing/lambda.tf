@@ -18,9 +18,9 @@ resource "aws_lambda_function" "this" {
     variables = {
       AWS_LAMBDA_EXEC_WRAPPER : "/opt/dynatrace"
       IMAGE_RESIZE_PROBLEM_FLAG : var.image_resize_problem_flag
-      OTEL_SERVICE_NAME : "lambda-image-resizer"
+      OTEL_SERVICE_NAME : "image-processing-lambda"
       BUCKET : "${aws_s3_bucket.this.bucket}"
-      DYNAMODB_TABLE_NAME : aws_dynamodb_table.this.name
+      PRODUCTS_TABLE : aws_dynamodb_table.this.name
       DT_TENANT : var.dynatrace_tenant
       DT_CLUSTER_ID : var.dt_cluster_id
       DT_CONNECTION_BASE_URL : var.dt_connection_base_url

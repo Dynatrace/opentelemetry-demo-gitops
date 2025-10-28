@@ -30,7 +30,13 @@ resource "aws_iam_role_policy" "access_s3_bucket" {
           "s3:PutObject",
           "s3:PutObjectTagging"
         ]
-      }
+      },
+      {
+        Effect : "Allow"
+        Resource = "${aws_s3_bucket.this.arn}"
+        Action = [
+          "s3:ListBucket"        ]
+      }      
     ]
   })
 }
