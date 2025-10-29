@@ -42,14 +42,22 @@ jobs:
       - name: Determine changes
         id: check_changes
         run: |
-          ENV_DIR=${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
-          FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $ENV_DIR)
+          ENV_DIR=${{ matrix.dir }}/terraform/environments
+          GENERAL_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ':(exclude)$ENV_DIR')
 
-          if [[ -z "$FILES_CHANGED" ]]; then
-            echo "No changes for ${{ matrix.env }}, skipping deployment."
+          if [[ -n "$GENERAL_CHANGES" ]]; then
+            echo "Lambda implementation changes detected, proceeding with deployment"
+            echo "skip=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          ENV_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $ENV_DIR/${{ matrix.env }})
+
+          if [[ -z "$ENV_CHANGES" ]]; then
+            echo "No changes for ${{ matrix.env }}, skipping deployment"
             echo "skip=true" >> $GITHUB_OUTPUT
           else
-            echo "Changes for ${{ matrix.env }} detected, proceeding with deployment."
+            echo "Changes for ${{ matrix.env }} detected, proceeding with deployment"
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
 
