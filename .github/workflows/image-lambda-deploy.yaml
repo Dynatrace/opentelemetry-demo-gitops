@@ -39,15 +39,6 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Prepare dependencies for lambda
-        working-directory: ${{ matrix.dir }}/src
-        run: npm install
-
       - name: Determine changes
         id: check_changes
         run: |
@@ -63,6 +54,7 @@ jobs:
           fi
 
       - name: Configure AWS credentials from AWS account
+        id: aws_auth
         if: steps.check_changes.outputs.skip == 'false'
         uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
@@ -70,8 +62,19 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-TERRAFORM
 
+      - name: Set up Node.js
+        if: steps.aws_auth.outcome == 'success'
+        uses: actions/setup-node@v6.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Prepare dependencies for lambda
+        id: deps_build
+        working-directory: ${{ matrix.dir }}/src
+        run: npm install
+
       - name: Setup Terraform
-        if: steps.check_changes.outputs.skip == 'false'
+        if: steps.deps_build.outcome == 'success'
         uses: hashicorp/setup-terraform@v3.1.2
         with:
           terraform_version: ${{ env.TF_VERSION }}
@@ -101,12 +104,11 @@ jobs:
           url: ${{ secrets[matrix.dt_url_secret] }}
           token: ${{ secrets[matrix.dt_token_secret] }}
           events: |
-            - title: Image provider lamdba deployed
+            - title: Github Actions for ${{ github.workflow }}
               type: CUSTOM_DEPLOYMENT
               entitySelector: type(SERVICE),tag("${{env.LAMBDA_TAG}}")
               properties:
                 source: GitHub
-                description: Github Actions for ${{ github.workflow }}
                 github.repository: "${{ github.repository }}"
                 github.ref: "${{ github.ref }}"
                 github.event_name: "${{ github.event_name }}"
