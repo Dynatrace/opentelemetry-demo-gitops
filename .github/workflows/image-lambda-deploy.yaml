@@ -43,7 +43,7 @@ jobs:
         id: check_changes
         run: |
           ENV_DIR=${{ matrix.dir }}/terraform/environments
-          GENERAL_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ':(exclude)$ENV_DIR')
+          GENERAL_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ":(exclude)$ENV_DIR")
 
           echo "DIFF=$GENERAL_CHANGES"
 
