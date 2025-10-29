@@ -87,7 +87,7 @@ async function nodeSDKBuilder() {
   process.on("SIGTERM", () => {
     sdk
       .shutdown()
-      .then(() => console.log("Tracing and metrics terminated"))
+      .then(() => console.log("Tracing and metrics terminated TEST"))
       .catch((error) => console.log("Error terminating tracing: ", error))
       .finally(() => process.exit(0));
   });
