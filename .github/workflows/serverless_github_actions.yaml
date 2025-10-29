@@ -1,0 +1,104 @@
+name: "Serverless problem pattern"
+env:
+  TF_VERSION: 1.13.4
+  LAMBDA_TAG: "[AWS]git-repository:https://github.com/Dynatrace/opentelemetry-demo-gitops"
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+    paths:
+      - image-provider/terraform/environments/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: [image-provider/terraform/environments]
+        env: [staging, playground-dev]
+        include:
+          - env: staging
+            dt_url_secret: "DT_URL_STAGING"
+            dt_token_secret: "DT_TOKEN_STAGING"
+          - env: playground-dev
+            dt_url_secret: "DT_URL_PLAYGROUND_DEV"
+            dt_token_secret: "DT_TOKEN_PLAYGROUND_DEV"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 2
+
+      - name: Determine changes
+        id: check_changes
+        run: |
+          ENV_DIR=${{ matrix.dir }}/${{ matrix.env }}
+          FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $ENV_DIR)
+
+          if [[ -z "$FILES_CHANGED" ]]; then
+            echo "No changes for ${{ matrix.env }}, skipping deployment."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "Changes for ${{ matrix.env }} detected, proceeding with deployment."
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Configure AWS credentials from AWS account
+        if: steps.check_changes.outputs.skip == 'false'
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: GitHub-OIDC-TERRAFORM
+
+      - name: Setup Terraform
+        if: steps.check_changes.outputs.skip == 'false'
+        uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        if: steps.check_changes.outputs.skip == 'false'
+        working-directory: ${{ matrix.dir }}/${{ matrix.env }}
+        id: tf_init
+        run: terraform init
+
+      - name: Terraform Plan
+        if: steps.tf_init.outcome == 'success'
+        working-directory: ${{ matrix.dir }}/${{ matrix.env }}
+        id: tf_plan
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        if: steps.tf_plan.outcome == 'success'
+        working-directory: ${{ matrix.dir }}/${{ matrix.env }}
+        id: tf_apply
+        run: terraform apply -no-color -auto-approve
+
+      - name: Send events to Dynatrace
+        if: steps.tf_apply.outcome == 'success'
+        uses: dynatrace-oss/dynatrace-github-action@v9.1
+        with:
+          url: ${{ secrets[matrix.dt_url_secret] }}
+          token: ${{ secrets[matrix.dt_token_secret] }}
+          events: |
+            - title: Image provider lamdba deployed
+              type: CUSTOM_DEPLOYMENT
+              entitySelector: type(SERVICE),tag("${{env.LAMBDA_TAG}}")
+              properties:
+                source: GitHub
+                description: Github Actions for image provider lambda 
+                github.repository: "${{ github.repository }}"
+                github.ref: "${{ github.ref }}"
+                github.event_name: "${{ github.event_name }}"
+                github.commit: "${{ github.sha }}"
+                terraform.outcome: "${{ steps.tf_apply.outcome }}"
