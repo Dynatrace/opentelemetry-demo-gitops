@@ -45,13 +45,11 @@ jobs:
           ENV_DIR=${{ matrix.dir }}/terraform/environments
           GENERAL_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ":(exclude)$ENV_DIR")
 
-          echo "DIFF=$GENERAL_CHANGES"
-
-          # if [[ -n "$GENERAL_CHANGES" ]]; then
-          #   echo "Lambda implementation changes detected, proceeding with deployment"
-          #   echo "skip=false" >> $GITHUB_OUTPUT
-          #   exit 0
-          # fi
+          if [[ -n "$GENERAL_CHANGES" ]]; then
+            echo "Lambda implementation changes detected, proceeding with deployment"
+            echo "skip=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
           ENV_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $ENV_DIR/${{ matrix.env }})
 
