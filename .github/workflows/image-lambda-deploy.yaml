@@ -1,4 +1,4 @@
-name: "Serverless problem pattern"
+name: "Image lambda deployment"
 env:
   TF_VERSION: 1.13.4
   LAMBDA_TAG: "[AWS]git-repository:https://github.com/Dynatrace/opentelemetry-demo-gitops"
@@ -96,7 +96,7 @@ jobs:
               entitySelector: type(SERVICE),tag("${{env.LAMBDA_TAG}}")
               properties:
                 source: GitHub
-                description: Github Actions for image provider lambda 
+                description: Github Actions for ${{ github.workflow }}
                 github.repository: "${{ github.repository }}"
                 github.ref: "${{ github.ref }}"
                 github.event_name: "${{ github.event_name }}"
