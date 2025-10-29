@@ -83,25 +83,25 @@ jobs:
         working-directory: ${{ matrix.dir }}/src
         run: npm install
 
-      - name: Setup Terraform
+      - name: Set up Terraform
         if: steps.deps_build.outcome == 'success'
         uses: hashicorp/setup-terraform@v3.1.2
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      - name: Terraform Init
+      - name: Terraform init
         if: steps.check_changes.outputs.skip == 'false'
         working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
         id: tf_init
         run: terraform init
 
-      - name: Terraform Plan
+      - name: Terraform plan
         if: steps.tf_init.outcome == 'success'
         working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
         id: tf_plan
         run: terraform plan -no-color
 
-      - name: Terraform Apply
+      - name: Terraform apply
         if: steps.tf_plan.outcome == 'success'
         working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
         id: tf_apply
