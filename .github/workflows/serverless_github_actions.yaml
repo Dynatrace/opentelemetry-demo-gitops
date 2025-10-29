@@ -6,7 +6,7 @@ env:
 on:
   pull_request:
     types: [closed]
-    branches: [main]
+    branches: [DREL-5883-actions-for-image-provider]
     paths:
       - image-provider/terraform/environments/**
 
