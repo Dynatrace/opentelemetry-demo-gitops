@@ -1,1 +1,1 @@
-image_resize_problem_flag = true
+image_resize_problem_flag = false
