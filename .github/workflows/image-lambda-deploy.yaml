@@ -39,12 +39,13 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Prepare dependencies for lambda
-        if: steps.check_changes.outputs.skip == 'false'
-        working-directory: ${{ matrix.dir }}/src
+      - name: Set up Node.js
         uses: actions/setup-node@v6.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Prepare dependencies for lambda
+        working-directory: ${{ matrix.dir }}/src
         run: npm install
 
       - name: Determine changes
