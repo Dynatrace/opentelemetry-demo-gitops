@@ -63,6 +63,7 @@ jobs:
           role-session-name: GitHub-OIDC-TERRAFORM
 
       - name: Set up Node.js
+        id: setup_node
         if: steps.aws_auth.outcome == 'success'
         uses: actions/setup-node@v6.0.0
         with:
@@ -70,6 +71,7 @@ jobs:
 
       - name: Prepare dependencies for lambda
         id: deps_build
+        if: steps.setup_node.outcome == 'success'
         working-directory: ${{ matrix.dir }}/src
         run: npm install
 
