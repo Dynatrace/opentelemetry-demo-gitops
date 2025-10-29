@@ -1,6 +1,7 @@
 name: "Image lambda deployment"
 env:
   TF_VERSION: 1.13.4
+  NODE_VERSION: "24"
   LAMBDA_TAG: "[AWS]git-repository:https://github.com/Dynatrace/opentelemetry-demo-gitops"
 
 on:
@@ -8,7 +9,7 @@ on:
     types: [closed]
     branches: [DREL-5883-actions-for-image-provider]
     paths:
-      - image-provider/terraform/environments/**
+      - image-provider/**
 
 jobs:
   deploy:
@@ -20,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dir: [image-provider/terraform/environments]
+        dir: [image-provider]
         env: [staging, playground-dev]
         include:
           - env: staging
@@ -38,10 +39,18 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Prepare dependencies for lambda
+        if: steps.check_changes.outputs.skip == 'false'
+        working-directory: ${{ matrix.dir }}/src
+        uses: actions/setup-node@v6.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+        run: npm install
+
       - name: Determine changes
         id: check_changes
         run: |
-          ENV_DIR=${{ matrix.dir }}/${{ matrix.env }}
+          ENV_DIR=${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
           FILES_CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $ENV_DIR)
 
           if [[ -z "$FILES_CHANGED" ]]; then
@@ -68,19 +77,19 @@ jobs:
 
       - name: Terraform Init
         if: steps.check_changes.outputs.skip == 'false'
-        working-directory: ${{ matrix.dir }}/${{ matrix.env }}
+        working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
         id: tf_init
         run: terraform init
 
       - name: Terraform Plan
         if: steps.tf_init.outcome == 'success'
-        working-directory: ${{ matrix.dir }}/${{ matrix.env }}
+        working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
         id: tf_plan
         run: terraform plan -no-color
 
       - name: Terraform Apply
         if: steps.tf_plan.outcome == 'success'
-        working-directory: ${{ matrix.dir }}/${{ matrix.env }}
+        working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
         id: tf_apply
         run: terraform apply -no-color -auto-approve
 
