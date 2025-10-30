@@ -6,6 +6,7 @@ on:
       - opened
     paths:
       - flagd/flagd-config.yaml
+      - image-provider/src/src/getProductImage.js
 
 jobs:
   approve:
