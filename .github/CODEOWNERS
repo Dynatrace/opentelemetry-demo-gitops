@@ -1,2 +1,3 @@
 * @Dynatrace/opentelemetry-demo-maintainer
 flagd/flagd-config.yaml
+image-provider/src/src/getProductImage.js
