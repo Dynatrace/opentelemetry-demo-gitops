@@ -14,7 +14,14 @@ jobs:
     runs-on: ubuntu-22.04
     if: github.event.pull_request.user.login == 'demoability-robot'
     steps:
+      - name: Generate a token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: actions/github-script@v7
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           script: |
             await github.rest.pulls.createReview({
@@ -24,6 +31,8 @@ jobs:
               event: "APPROVE"
             })
       - uses: actions/github-script@v7
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           script: |
             await github.rest.pulls.merge({

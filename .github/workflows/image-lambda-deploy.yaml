@@ -33,13 +33,23 @@ jobs:
       run:
         shell: bash
     steps:
+      - name: Generate a token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Git checkout
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         uses: actions/checkout@v5.0.0
         with:
           fetch-depth: 2
 
       - name: Determine changes
         id: check_changes
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           ENV_DIR=${{ matrix.dir }}/terraform/environments
           GENERAL_CHANGES=$(git diff --name-only ${{ github.sha }}^ ${{ github.sha }} -- ":(exclude)$ENV_DIR")
