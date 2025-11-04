@@ -1,0 +1,8 @@
+components:
+  ingress:
+    enabled: false
+    # host: ingress.host.com
+  dt-credentials:
+    enabled: false
+    # tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
+    # tenantToken: dt0c01.abc.xxx
