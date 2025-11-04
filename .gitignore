@@ -1,6 +1,8 @@
 *.env
+!*.example.env
 resources.yaml
 charts/**/charts
+kustomize/**/charts
 *.tgz
 internal/*.yaml
 
