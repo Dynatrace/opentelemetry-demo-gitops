@@ -22,10 +22,6 @@ To properly function the Astroshop deployment requires a few other tools to be p
 
 To monitor the cluster with Dynatrace you can follow the official [guide](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/deployment/full-stack-observability) or use the sample [deployment](./config/dt-operator/README.md)
 
-#### DAPR
-
-Astroshop uses [DAPR](https://dapr.io/) under the hood so it needs the operator installed on the cluster. Installation info [here](./config/dapr/README.md)
-
 #### Ingress controller [optional]
 
 If you want to deploy the ingress resources (by setting `components.ingress.enabled: true` in values) you will need the ingress controller running on the cluster. If you already have one running make sure that it's properly instrumented. Sample installation info [here](./config/ingress/README.md)
