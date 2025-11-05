@@ -1,0 +1,8 @@
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: LAMBDA_URL
+    valueFrom:
+      configMapKeyRef:
+        name: image-provider-data
+        key: LAMBDA_URL

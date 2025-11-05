@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: sqs-data
+    envs:
+      - data.env # use the 'data.example.env' file as template
+
+secretGenerator:
+  - name: sqs-secrets
+    envs:
+      - secrets.env # use the 'secrets.example.env' file as template
+
+patches:
+  - path: ./patches/env-vars.yaml
+    target:
+      kind: Deployment
+      name: checkout

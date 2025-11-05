@@ -1,0 +1,32 @@
+- op: add
+  path: &path /spec/template/spec/containers/0/env/-
+  value:
+    name: SQS_QUEUE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: &configMapName sqs-data
+        key: SQS_QUEUE_URL
+- op: add
+  path: *path
+  value:
+    name: AWS_REGION
+    valueFrom:
+      configMapKeyRef:
+        name: *configMapName
+        key: AWS_REGION
+- op: add
+  path: *path
+  value:
+    name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: &secretName sqs-secrets
+        key: AWS_ACCESS_KEY_ID
+- op: add
+  path: *path
+  value:
+    name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: *secretName
+        key: AWS_SECRET_ACCESS_KEY

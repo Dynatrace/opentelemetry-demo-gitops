@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# manually build the helm chart and push to repo
+# script performs checks to see if version specified in Chart.yaml
+# already exists, if yes, it will error out
+
 cd "$(dirname "$0")"
 
 BASE_REPO="oci://europe-docker.pkg.dev"

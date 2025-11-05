@@ -18,7 +18,7 @@ spec:
             - -c
             - |
               sleep 60 && \
-              kubectl delete pod -l app.kubernetes.io/component=flagd          
+              kubectl delete pod -l app.kubernetes.io/component=flagd
       restartPolicy: Never
 ---
 apiVersion: v1
