@@ -28,7 +28,9 @@ If you want to deploy the ingress resources (by setting `components.ingress.enab
 
 ### Helm deployment
 
-To deploy the helm chart you will first need to set the required values [here](./config/helm-values/values.yaml)
+To deploy the helm chart you will first need to set the required values [here](./kustomize/base/values.yaml)
+
+You can check the possible values [here](./charts/astroshop/values.yaml)
 
 - _components.dt-credentials.tenantEndpoint_ - tenant url including the `/api/v2/otlp`, e.g. **https://wkf10640.live.dynatrace.com/api/v2/otlp**
 - _components.dt-credentials.tenantToken_ - access token using the `Kubernetes: Data Ingest` template
@@ -41,7 +43,9 @@ then run
 
 #### Overlays
 
-If you want to deploy a version with extra features can use one of the overlays
+If you want to deploy a version with extra features can use one of the overlays or create your own
+
+> **NOTE:** the extra components being deployed may require extra configuration, refer to their READMEs to check what data needs to be provided
 
 ```bash
 ./deploy {overlay-name}
@@ -51,7 +55,7 @@ If you want to deploy a version with extra features can use one of the overlays
 
 You can read more about it [here](./image-provider/)
 
-Once you've deployed the infrastructure you need to take the lambda url and set it in the [patch file](./config/kustomize/overlays/image-provider/patches/frontend-env.yaml)
+Once you've deployed the infrastructure you need to take the lambda url and set it in the [env file](./kustomize/components/image-provider/data.env)
 
 # Flagd configuration change: problem patterns
 
