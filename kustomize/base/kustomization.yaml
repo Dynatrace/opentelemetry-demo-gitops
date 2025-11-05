@@ -11,6 +11,9 @@ helmCharts:
 
 namespace: astroshop
 
+resources:
+  - ./namespace.yaml
+
 components:
   - ../components/ownership-labels
   - ../components/flagd-config
