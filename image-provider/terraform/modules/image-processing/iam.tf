@@ -35,8 +35,9 @@ resource "aws_iam_role_policy" "access_s3_bucket" {
         Effect : "Allow"
         Resource = "${aws_s3_bucket.this.arn}"
         Action = [
-          "s3:ListBucket"        ]
-      }      
+          "s3:ListBucket"
+        ]
+      }
     ]
   })
 }
