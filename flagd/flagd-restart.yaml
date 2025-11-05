@@ -14,13 +14,11 @@ spec:
         - name: restart
           image: alpine/kubectl:1.34.1
           command:
-            [
-              "kubectl",
-              "delete",
-              "pod",
-              "-l",
-              "app.kubernetes.io/component=flagd",
-            ]
+            - /bin/sh
+            - -c
+            - |
+              sleep 60 && \
+              kubectl delete pod -l app.kubernetes.io/component=flagd          
       restartPolicy: Never
 ---
 apiVersion: v1
