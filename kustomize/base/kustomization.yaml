@@ -4,7 +4,7 @@ kind: Kustomization
 helmCharts:
   - name: astroshop
     repo: oci://europe-docker.pkg.dev/dynatrace-demoability/helm
-    version: 0.3.3
+    version: 0.3.4
     releaseName: astroshop
     additionalValuesFiles:
       - values.yaml
