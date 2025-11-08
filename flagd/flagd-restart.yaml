@@ -17,7 +17,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              sleep 300 && \
+              sleep 900 && \
               kubectl delete pod -l app.kubernetes.io/component=flagd          
       restartPolicy: Never
 ---
