@@ -26,6 +26,7 @@ resource "aws_lambda_function" "this" {
       DT_CONNECTION_BASE_URL : var.dt_connection_base_url
       DT_CONNECTION_AUTH_TOKEN : var.dt_connection_auth_token
       DT_LOG_COLLECTION_AUTH_TOKEN : var.dt_log_collection_auth_token
+      DT_OPEN_TELEMETRY_ENABLE_INTEGRATION: true
     }
   }
 
