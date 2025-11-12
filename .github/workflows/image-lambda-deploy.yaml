@@ -5,15 +5,13 @@ env:
   LAMBDA_TAG: "[AWS]git-repository:https://github.com/Dynatrace/opentelemetry-demo-gitops"
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches: [main]
     paths:
       - image-provider/**
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-24.04
     permissions:
       id-token: write
@@ -23,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: [image-provider]
-        env: [staging, playground-dev]
+        env: [staging, playground-dev, playground-staging]
         include:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
@@ -31,6 +29,9 @@ jobs:
           - env: playground-dev
             dt_url_secret: "DT_URL_PLAYGROUND_DEV"
             dt_token_secret: "DT_TOKEN_PLAYGROUND_DEV"
+          - env: playground-staging
+            dt_url_secret: "DT_URL_PLAYGROUND_STAGING"
+            dt_token_secret: "DT_TOKEN_PLAYGROUND_STAGING"
     defaults:
       run:
         shell: bash
@@ -44,7 +45,7 @@ jobs:
         id: check_changes
         run: |
           ENV_DIR=${{ matrix.dir }}/terraform/environments
-          GENERAL_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- ":(exclude)$ENV_DIR")
+          GENERAL_CHANGES=$(git diff --name-only ${{ github.sha }}^ ${{ github.sha }} -- ":(exclude)$ENV_DIR")
 
           if [[ -n "$GENERAL_CHANGES" ]]; then
             echo "Lambda implementation changes detected, proceeding with deployment"
@@ -52,7 +53,7 @@ jobs:
             exit 0
           fi
 
-          ENV_CHANGES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $ENV_DIR/${{ matrix.env }})
+          ENV_CHANGES=$(git diff --name-only ${{ github.sha }}^ ${{ github.sha }} -- $ENV_DIR/${{ matrix.env }})
 
           if [[ -z "$ENV_CHANGES" ]]; then
             echo "No changes for ${{ matrix.env }}, skipping deployment"
@@ -120,6 +121,7 @@ jobs:
               entitySelector: type(SERVICE),tag("${{env.LAMBDA_TAG}}")
               properties:
                 source: GitHub
+                event.description: Image processing problem trigger
                 github.repository: "${{ github.repository }}"
                 github.ref: "${{ github.ref }}"
                 github.event_name: "${{ github.event_name }}"
