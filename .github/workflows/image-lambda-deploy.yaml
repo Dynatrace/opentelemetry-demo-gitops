@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: [image-provider]
-        env: [staging, playground-dev]
+        env: [staging, playground-dev, playground-staging]
         include:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
@@ -29,6 +29,9 @@ jobs:
           - env: playground-dev
             dt_url_secret: "DT_URL_PLAYGROUND_DEV"
             dt_token_secret: "DT_TOKEN_PLAYGROUND_DEV"
+          - env: playground-staging
+            dt_url_secret: "DT_URL_PLAYGROUND_STAGING"
+            dt_token_secret: "DT_TOKEN_PLAYGROUND_STAGING"
     defaults:
       run:
         shell: bash
