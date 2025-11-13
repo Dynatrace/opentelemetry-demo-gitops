@@ -134,16 +134,87 @@ opentelemetry-demo:
           memory: 512Mi
     # ---------------------------------------------------
     flagd:
+      enabled: true
+      imageOverride:
+        repository: "ghcr.io/open-feature/flagd"
+        tag: "v0.11.1"
+      useDefault:
+        env: true
       podAnnotations:
-        dynatrace.com/inject: "false"
-        metadata.dynatrace.com/process.technology: "flagd"
+        oneagent.dynatrace.com/inject: "false"   
+        metadata.dynatrace.com/process.technology: "flagd" 
+      replicas: 1
+      #service:
+      #  port: 8013
+      envOverrides:
+        - name: FLAGD_METRICS_EXPORTER
+          value: otel
+        - name: FLAGD_OTEL_COLLECTOR_URI
+          value: $(OTEL_COLLECTOR_NAME):4317
       resources:
-        requests:
-          cpu: 25m
-          memory: 300Mi
         limits:
-          cpu: 250m
           memory: 300Mi
+      command:
+        - "/flagd-build"
+        - "start"
+        - "--uri"
+        - "file:./etc/flagd/demo.flagd.json"
+      mountedEmptyDirs:
+        - name: config-rw
+          mountPath: /etc/flagd
+      # flgad-ui as a sidecar container in the same pod so the flag json file can be shared
+      sidecarContainers:
+        - name: flagd-ui
+          useDefault:
+            env: false
+          service:
+            port: 4000
+          env:
+            - name: OTEL_SERVICE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['app.kubernetes.io/component']
+            - name: OTEL_COLLECTOR_NAME
+              value: otel-collector
+            - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+              value: cumulative
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=2.1.3
+            - name: FLAGD_METRICS_EXPORTER
+              value: otel
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://$(OTEL_COLLECTOR_NAME):4318
+            - name: SECRET_KEY_BASE
+              value: "fHaF1lg9V+fJh1C6OhYFqfs/9PpQxpr8dwRYZ86P9ZlEGiTAP33lhu1Ya6iow9v0"
+            - name: PHX_HOST
+              value: "localhost"
+            - name: PHX_PORT
+              value: "4000"
+            - name: PORT
+              value: "4000"
+            - name: FLAGD_UI_SERVICE_HOST
+              value: "127.0.0.1"
+            - name: FLAGD_UI_SERVICE_PORT
+              value: "4000"
+          resources:
+            limits:
+              memory: 300Mi
+          volumeMounts:
+            - name: config-rw
+              mountPath: /app/data
+      initContainers:
+        - name: init-config
+          image: busybox
+          command: ['sh', '-c', 'cp /config-ro/demo.flagd.json /config-rw/demo.flagd.json && cat /config-rw/demo.flagd.json']
+          volumeMounts:
+            - mountPath: /config-ro
+              name: config-ro
+            - mountPath: /config-rw
+              name: config-rw
+      additionalVolumes:
+        - name: config-ro
+          configMap:
+            name: 'flagd-config'
     # ---------------------------------------------------
     fraud-detection:
       podAnnotations:
@@ -152,10 +223,10 @@ opentelemetry-demo:
       resources:
         requests:
           cpu: 25m #100
-          memory: 300Mi
+          memory: 256Mi
         limits:
           cpu: 250m
-          memory: 300Mi
+          memory: 512Mi
     # ---------------------------------------------------
     frontend:
       podAnnotations:

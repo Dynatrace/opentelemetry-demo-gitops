@@ -34,8 +34,8 @@ If you want to deploy the ingress resources (by setting `components.ingress.enab
 
 To deploy the helm chart you will first need to set the required values [here](./config/helm-values/values.yaml)
 
-- _components.dt-credentials.tenantEndpoint_ - tenant url including the `/api/v2/otlp`, e.g. **https://wkf10640.live.dynatrace.com/api/v2/otlp**
-- _components.dt-credentials.tenantToken_ - access token using the `Kubernetes: Data Ingest` template
+- _components.dt-credentials.collector_tenant_endpoint_ - tenant url including the `/api/v2/otlp`, e.g. **https://wkf10640.live.dynatrace.com/api/v2/otlp**
+- _components.dt-credentials.collector_tenant_token_ - access token using the `Kubernetes: Data Ingest` template
 
 then run
 
