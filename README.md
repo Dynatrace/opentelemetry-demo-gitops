@@ -1,3 +1,27 @@
+<!-- 
+Collaboration notes & todos
+
+
+
+Documentation:
+[] - Simplify documentation. Maybe add MKdocs? to have better user UX
+[] - Explain what this repo is about, documentation about new usecases, problem patters. Point to the sourcecode where the helm charts are pointing to.
+[] - 
+
+
+Repository
+
+[] - Renaming to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN of dt-secrets to keep consistency and avoid missinterpretations.
+[] - Enable frontend-proxy. Have this by default, fix missing images, envoy of different services, flagd, etc
+[] - Enhance deploy script to run automatically on 1 run, fail if vars are not defined.
+[] - 
+
+
+
+-->
+
+
+
 # Opentelemetry demo gitops
 
 This repository contains Helm chart for [Astroshop](https://github.com/Dynatrace/opentelemetry-demo), an adaptation of the [Opentelemetry Demo](https://github.com/open-telemetry/opentelemetry-demo) app, alongside with:
