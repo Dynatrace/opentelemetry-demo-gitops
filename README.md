@@ -2,19 +2,36 @@
 Collaboration notes & todos
 
 
-
 Documentation:
-[] - Simplify documentation. Maybe add MKdocs? to have better user UX
-[] - Explain what this repo is about, documentation about new usecases, problem patters. Point to the sourcecode where the helm charts are pointing to.
-[] - 
+[ ] - Simplify documentation. Maybe add MKdocs? to have better user UX
+[ ] - Explain what this repo is about, documentation about new usecases, problem patterns. Point to the sourcecode where the helm charts are pointing to.
+[ ] - Add step by step doc, simplify options, use as default CNFS with only 3 vars, Environment URL, Ingest and Operator tokens.
 
 
-Repository
+Repository changes:
+[x] - Renaming to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN of dt-secrets to keep consistency and avoid missinterpretations.
+[ ] - Enable frontend-proxy. Have this by default, fix missing images, envoy of different services, flagd, etc
+[ ] - Enhance deploy script to run automatically on 1 run, fail if vars are not defined.
+[y] - Deploy script (in framework code) - clone to this repo later 
+    [y] - helm repo add, update, builds 
+    [y] - check/install Kustomize
+    [y] - helm upgrade with env vars so they are not stored in YAML
 
-[] - Renaming to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN of dt-secrets to keep consistency and avoid missinterpretations.
-[] - Enable frontend-proxy. Have this by default, fix missing images, envoy of different services, flagd, etc
-[] - Enhance deploy script to run automatically on 1 run, fail if vars are not defined.
-[] - 
+[] - Flagd - expose Flagd-UI so Users can change the Problem Patterns easily.
+    [] - UI explsed as side car in the helm values, 
+    [] - SECRET_KEY_BASE added in base 64 
+    [] - flagd-ui service added so it can be properly exposed in envoy
+    Issue was that the envoy.yaml in the frontend-proxy has a flad-ui cluster defined but there is no endpoint for it, the flagdui is exposed as sidecar in the flagd service
+[X] - Loadtest scaled down to 1 replica having 2 users, no problems detected on Kind
+[X] - Fraud Detection Memory Limits raised to 512Mi
+[X] - Active Gate Limits raised to 1 Gig (maybe use 2?)
+
+
+## Envoy troubleshoot
+
+# Check clusters
+ kubectl port-forward -n astroshop frontend-proxy-594968df69-8jmpk 10000:10000 
+ curl http://localhost:10000/clusters | grep fladg
 
 
 
