@@ -3,5 +3,5 @@ components:
     host: ingress.host.test
   dt-credentials:
     enabled: true
-    tenantEndpoint: tenant.endpoint.test
-    tenantToken: tenant.token.test
+    collector_tenant_endpoint: tenant.endpoint.test
+    collector_tenant_token: tenant.token.test
