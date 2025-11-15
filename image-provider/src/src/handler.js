@@ -1,5 +1,4 @@
 const { trace } = require('@opentelemetry/api');
-const { log } = require('./logger');
 const { ValidationError, NotFoundError } = require('./errors');
 const {
   REGION,
@@ -12,6 +11,8 @@ const {
 } = require('./config');
 const { sanitizeScreen } = require('./util');
 const { handleProductImageRequest } = require('./getProductImage');
+
+const log = require('./logger');
 
 const tracer = trace.getTracer('product-image-lambda');
 
