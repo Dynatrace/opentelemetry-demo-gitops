@@ -96,6 +96,9 @@ async function ensureTargetImage({
     try {
       const signed = await presignGetUrl(bucket, targetKey, presignTtlSeconds);
       span.setAttribute('s3.presign.expiresIn', presignTtlSeconds);
+
+      log.info(`Presign URL generated correcltly for product image ${originalKey}.`, {originalKey});
+
       return signed;
     } finally {
       span.end();
