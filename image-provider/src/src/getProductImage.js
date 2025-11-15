@@ -1,9 +1,10 @@
 const { trace } = require('@opentelemetry/api');
-const { log } = require('./logger');
 const { NotFoundError } = require('./errors');
 const { inferContentType } = require('./util');
 const { getProductImageName } = require('./aws/ddb');
 const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require('./aws/s3');
+
+const log = require('./logger');
 
 const tracer = trace.getTracer('product-image-lambda');
 
