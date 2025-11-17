@@ -1,9 +1,10 @@
 const { trace } = require('@opentelemetry/api');
-const { log } = require('./logger');
 const { NotFoundError } = require('./errors');
 const { inferContentType } = require('./util');
 const { getProductImageName } = require('./aws/ddb');
 const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require('./aws/s3');
+
+const log = require('./logger');
 
 const tracer = trace.getTracer('product-image-lambda');
 
@@ -47,7 +48,7 @@ async function ensureTargetImage({
     }
   });
 
-  if (!exists) {
+  if (exists) {
     log.warn(`Image for screen size ${screen} not found under the path: ${targetKey}, resizing the original product image ${originalKey}.`, {
         key: targetKey,
         screen,
@@ -95,6 +96,9 @@ async function ensureTargetImage({
     try {
       const signed = await presignGetUrl(bucket, targetKey, presignTtlSeconds);
       span.setAttribute('s3.presign.expiresIn', presignTtlSeconds);
+
+      log.info(`Presign URL generated correcltly for product image ${originalKey}.`, {originalKey});
+
       return signed;
     } finally {
       span.end();
