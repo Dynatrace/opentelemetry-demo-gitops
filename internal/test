@@ -4,5 +4,5 @@ FILE=${1:-"r.yaml"}
 
 helm template astroshop ../charts/astroshop \
     --namespace astroshop \
-    -f "../config/helm-values/test.yaml" \
+    -f "./test.yaml" \
     > $FILE

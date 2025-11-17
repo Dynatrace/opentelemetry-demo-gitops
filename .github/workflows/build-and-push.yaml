@@ -28,7 +28,7 @@ jobs:
       - name: Setup helm
         run: ./$SCRIPTS_PATH/setup-helm
       - name: Test if chart builds
-        run: helm template astroshop $CHART_PATH -f config/helm-values/test.yaml > output.yaml
+        run: helm template astroshop $CHART_PATH -f "internal/test.yaml" > output.yaml
 
   validate-version:
     runs-on: ubuntu-22.04

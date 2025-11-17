@@ -3,8 +3,10 @@
 resources.yaml
 charts/**/charts
 kustomize/**/charts
+kustomize/**/secrets.yaml
 *.tgz
 internal/*.yaml
+!internal/test.yaml
 
 node_modules
 build
