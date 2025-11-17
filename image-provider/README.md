@@ -46,7 +46,7 @@ The values can be supplied by variables/locals or by the use of the `secrets` mo
 - Make sure you're authenticated with AWS
 - Apply the configuration by running `terraform apply`.
 - To deploy the astroshop
-  - paste the terraform output `AstroshopImageProviderAPIUrl` into [patch file](../config/kustomize/overlays/image-provider/patches/frontend-env.yaml)
+  - paste the terraform output `AstroshopImageProviderAPIUrl` into [data.env](../kustomize/components/image-provider)
   - go to [root](../) of repository
     ```bash
     ./deploy image-provider

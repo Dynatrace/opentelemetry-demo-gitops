@@ -7,7 +7,7 @@ components:
     # tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
     # tenantToken: dt0c01.abc.xxx
   ingress:
-    enabled: true
+    enabled: false
     # used for setting host in ingress, the url set in loadgen should match this
     # host: ""
     # the ip whitelist used for the ingress
@@ -28,7 +28,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop
-      tag: 237cf09
+      tag: af0271f
   components:
     # ---------------------------------------------------
     accounting:
@@ -184,8 +184,7 @@ opentelemetry-demo:
           memory: 512Mi
     # ---------------------------------------------------
     frontend-proxy:
-      # disable frontend proxy since we're using nginx ingress
-      enabled: false
+      enabled: true
     # ---------------------------------------------------
     image-provider:
       podAnnotations:

@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+configMapGenerator:
+  - name: image-provider-data
+    options:
+      disableNameSuffixHash: true
+    envs:
+      - data.env # use the 'data.example.env' file as template
+
+patches:
+  - path: patches/env-vars.yaml
+    target:
+      kind: Deployment
+      name: frontend

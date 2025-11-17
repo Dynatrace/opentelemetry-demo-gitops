@@ -1,6 +1,0 @@
-#!/bin/bash
-
-cd "$(dirname "$0")"
-
-cat <&0 > ../../base/resources.yaml
-kustomize build . && rm ../../base/resources.yaml
