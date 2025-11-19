@@ -150,6 +150,4 @@ async function handleProductImageRequest({
   return { url, key };
 }
 
-
 module.exports = { handleProductImageRequest };
-
