@@ -48,7 +48,7 @@ async function ensureTargetImage({
     }
   });
 
-  if (exists) {
+  if (!exists) {
     log.warn(`Image for screen size ${screen} not found under the path: ${targetKey}, resizing the original product image ${originalKey}.`, {
         key: targetKey,
         screen,
@@ -149,6 +149,5 @@ async function handleProductImageRequest({
 
   return { url, key };
 }
-
 
 module.exports = { handleProductImageRequest };
