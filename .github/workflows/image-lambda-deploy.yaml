@@ -121,7 +121,7 @@ jobs:
               entitySelector: type(SERVICE),tag("${{env.LAMBDA_TAG}}")
               properties:
                 source: GitHub
-                event.description: Image processing problem trigger from https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+                event.description: Image processing problem trigger from [PR](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
                 github.repository: "${{ github.repository }}"
                 github.ref: "${{ github.ref }}"
                 github.event_name: "${{ github.event_name }}"
