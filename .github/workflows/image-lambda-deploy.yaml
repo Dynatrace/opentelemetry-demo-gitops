@@ -3,7 +3,7 @@ env:
   TF_VERSION: 1.13.4
   NODE_VERSION: "24.11.0"
   LAMBDA_TAG: "[AWS]git-repository:https://github.com/Dynatrace/opentelemetry-demo-gitops"
-
+  LAMBDA_TYPE: "cloud:aws:lambda"
 on:
   push:
     branches: [main]
@@ -118,12 +118,12 @@ jobs:
           events: |
             - title: Github Actions for ${{ github.workflow }}
               type: CUSTOM_DEPLOYMENT
-              entitySelector: type(SERVICE),tag("${{env.LAMBDA_TAG}}")
+              entitySelector: type(SERVICE), fromRelationships.runsOn(type(${{env.LAMBDA_TYPE}}), tag(${{env.LAMBDA_TAG}}))
               properties:
                 source: GitHub
                 event.description: Image processing problem trigger from [PR](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-                github.repository: "${{ github.repository }}"
-                github.ref: "${{ github.ref }}"
-                github.event_name: "${{ github.event_name }}"
-                github.commit: "${{ github.sha }}"
-                terraform.outcome: "${{ steps.tf_apply.outcome }}"
+                github.repository: ${{ github.repository }}
+                github.ref: ${{ github.ref }}
+                github.event_name: ${{ github.event_name }}
+                github.commit: ${{ github.sha }}
+                terraform.outcome: ${{ steps.tf_apply.outcome }}
