@@ -1,5 +1,6 @@
 components:
   ingress:
+    enabled: true
     host: ingress.host.test
   dt-credentials:
     enabled: true
