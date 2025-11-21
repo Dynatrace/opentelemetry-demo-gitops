@@ -10,6 +10,13 @@ components:
     enabled: false
     # used for setting host in ingress, the url set in loadgen should match this
     # host: ""
+    # you can use this for fine-grain control over which ingresses are created
+    # this only works when `ingress.enabled` is true
+    components:
+      root: true
+      images: true
+      feature-flags: true
+      flagd-ui: true
     # the ip whitelist used for the ingress
     # allows for limitting the allowed ips, leave empty to not add the restriction
     # two separate fields are given to allow for more complicated setups

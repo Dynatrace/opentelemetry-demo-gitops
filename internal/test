@@ -2,6 +2,8 @@
 
 FILE=${1:-"r.yaml"}
 
+cd "$(dirname "$0")"
+
 helm template astroshop ../charts/astroshop \
     --namespace astroshop \
     -f "./test.yaml" \
