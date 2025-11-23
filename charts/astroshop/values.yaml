@@ -52,7 +52,7 @@ opentelemetry-demo:
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
         requests:
-          cpu: 25m
+          cpu: 100m
           memory: 256Mi
         limits:
           cpu: 250m
@@ -110,7 +110,7 @@ opentelemetry-demo:
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
         requests:
-          cpu: 25m
+          cpu: 250m
           memory: 64Mi
         limits:
           cpu: 250m
@@ -184,7 +184,7 @@ opentelemetry-demo:
           value: "0" # This expects users to use `kubectl port-forward ...`
       resources:
         requests:
-          cpu: 500m
+          cpu: 800m
           memory: 300Mi
         limits:
           cpu: "1"
@@ -301,7 +301,7 @@ opentelemetry-demo:
         metadata.dynatrace.com/process.technology: "python"
       resources:
         requests:
-          cpu: 25m
+          cpu: 50m
           memory: 64Mi
         limits:
           cpu: 250m
