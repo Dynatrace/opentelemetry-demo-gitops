@@ -26,6 +26,9 @@ jobs:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
             dt_token_secret: "DT_TOKEN_STAGING"
+          - env: live
+            dt_url_secret: "DT_URL_LIVE"
+            dt_token_secret: "DT_TOKEN_LIVE"            
           - env: playground-dev
             dt_url_secret: "DT_URL_PLAYGROUND_DEV"
             dt_token_secret: "DT_TOKEN_PLAYGROUND_DEV"
