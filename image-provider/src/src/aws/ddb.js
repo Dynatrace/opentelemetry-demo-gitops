@@ -1,7 +1,7 @@
 // src/aws/ddb.js
-const { GetItemCommand } = require('@aws-sdk/client-dynamodb');
-const { ddb } = require('./clients');
-const { log } = require('../logger');
+const { GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { ddb } = require("./clients");
+const { log } = require("../logger");
 
 /**
  * Get the image file name for a given productId.
@@ -23,7 +23,7 @@ async function getProductImageName({
 
   const res = await ddb.send(cmd);
   if (!res.Item) {
-    log.warn('DynamoDB item not found.', { productId });
+    log.warn("DynamoDB item not found.", { productId });
     return null;
   }
   const preferred = res.Item[imageAttr]?.S;

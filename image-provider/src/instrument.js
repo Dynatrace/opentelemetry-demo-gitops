@@ -48,7 +48,7 @@ const loggerProvider = new LoggerProvider({
 
 // Add a processor to export log record
 loggerProvider.addLogRecordProcessor(
-  new SimpleLogRecordProcessor(new ConsoleLogRecordExporter())
+  new SimpleLogRecordProcessor(new ConsoleLogRecordExporter()),
 );
 logsAPI.logs.setGlobalLoggerProvider(loggerProvider);
 

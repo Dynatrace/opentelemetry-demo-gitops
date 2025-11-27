@@ -83,7 +83,7 @@ jobs:
         id: deps_build
         if: steps.setup_node.outcome == 'success'
         working-directory: ${{ matrix.dir }}/src
-        run: npm install
+        run: npm ci --omit-dev
 
       - name: Set up Terraform
         if: steps.deps_build.outcome == 'success'
