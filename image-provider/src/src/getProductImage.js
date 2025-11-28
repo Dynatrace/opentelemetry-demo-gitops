@@ -1,17 +1,12 @@
-const { trace } = require("@opentelemetry/api");
-const { NotFoundError } = require("./errors");
-const { inferContentType } = require("./util");
-const { getProductImageName } = require("./aws/ddb");
-const {
-  objectExists,
-  getObjectBuffer,
-  putObject,
-  presignGetUrl,
-} = require("./aws/s3");
+const { trace } = require('@opentelemetry/api');
+const { NotFoundError } = require('./errors');
+const { inferContentType } = require('./util');
+const { getProductImageName } = require('./aws/ddb');
+const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require('./aws/s3');
 
-const log = require("./logger");
+const log = require('./logger');
 
-const tracer = trace.getTracer("product-image-lambda");
+const tracer = trace.getTracer('product-image-lambda');
 
 /**
  * Build S3 keys for original and target sizes.
@@ -35,108 +30,80 @@ async function ensureTargetImage({
 }) {
   const { originalKey, targetKey } = buildKeys(screen, imageName);
 
-  const exists = await tracer.startActiveSpan(
-    "S3:HeadObject check if image for screen size exists",
-    async (span) => {
+  const exists = await tracer.startActiveSpan('S3:HeadObject check if image for screen size exists', async (span) => {
+    try {
+      const found = await objectExists(bucket, targetKey);
+      span.setAttribute('s3.target.exists', found);
+      if (!found) {
+        // Required warning message
+        log.warn(`Image for screen size ${screen} not found under the path: ${targetKey}`, {
+          bucket,
+          key: targetKey,
+          screen,
+        });
+      }
+      return found;
+    } finally {
+      span.end();
+    }
+  });
+
+  if (!exists) {
+    log.warn(`Image for screen size ${screen} not found under the path: ${targetKey}, resizing the original product image ${originalKey}.`, {
+        key: targetKey,
+        screen,
+        originalKey
+        });
+       
+    await tracer.startActiveSpan('Resize original product image', async (span) => {
       try {
-        const found = await objectExists(bucket, targetKey);
-        span.setAttribute("s3.target.exists", found);
-        if (!found) {
-          // Required warning message
-          log.warn(
-            `Image for screen size ${screen} not found under the path: ${targetKey}`,
-            {
-              bucket,
-              key: targetKey,
-              screen,
-            },
-          );
-        }
-        return found;
+        // Download original
+        const originalBuf = await tracer.startActiveSpan('S3:GetObject get original product image from S3', async (getSpan) => {
+          try {
+            const buf = await getObjectBuffer(bucket, originalKey);
+            getSpan.setAttribute('s3.original.bytes', buf.length);
+            return buf;
+          } finally {
+            getSpan.end();
+          }
+        });
+
+        await tracer.startActiveSpan('Image resizing', async (resizeSpan) => {
+          // 6s sleep to simulate processing without altering bytes
+          await new Promise((r) => setTimeout(r, 6000));
+          resizeSpan.end();
+        });
+
+        // Upload target
+        await tracer.startActiveSpan('S3:PutObject put resized image to S3', async (putSpan) => {
+          const contentType = inferContentType(imageName);
+
+          await putObject(bucket, targetKey, originalBuf, contentType, {
+            source: 'lambda-resizer',
+            screen,
+            productId: String(productId),
+          });
+          putSpan.end();
+        });
       } finally {
         span.end();
       }
-    },
-  );
-
-  if (exists) {
-    log.warn(
-      `Image for screen size ${screen} not found under the path: ${targetKey}, resizing the original product image ${originalKey}.`,
-      {
-        key: targetKey,
-        screen,
-        originalKey,
-      },
-    );
-
-    await tracer.startActiveSpan(
-      "Resize original product image",
-      async (span) => {
-        try {
-          // Download original
-          const originalBuf = await tracer.startActiveSpan(
-            "S3:GetObject get original product image from S3",
-            async (getSpan) => {
-              try {
-                const buf = await getObjectBuffer(bucket, originalKey);
-                getSpan.setAttribute("s3.original.bytes", buf.length);
-                return buf;
-              } finally {
-                getSpan.end();
-              }
-            },
-          );
-
-          await tracer.startActiveSpan("Image resizing", async (resizeSpan) => {
-            // 6s sleep to simulate processing without altering bytes
-            await new Promise((r) => setTimeout(r, 6000));
-            resizeSpan.end();
-          });
-
-          // Upload target
-          await tracer.startActiveSpan(
-            "S3:PutObject put resized image to S3",
-            async (putSpan) => {
-              const contentType = inferContentType(imageName);
-
-              await putObject(bucket, targetKey, originalBuf, contentType, {
-                source: "lambda-resizer",
-                screen,
-                productId: String(productId),
-              });
-              putSpan.end();
-            },
-          );
-        } finally {
-          span.end();
-        }
-      },
-    );
+    });
   }
 
   // Presign final URL
-  const url = await tracer.startActiveSpan(
-    "S3:GetObject get presign URL",
-    async (span) => {
-      try {
-        const signed = await presignGetUrl(
-          bucket,
-          targetKey,
-          presignTtlSeconds,
-        );
-        span.setAttribute("s3.presign.expiresIn", presignTtlSeconds);
+  const url = await tracer.startActiveSpan('S3:GetObject get presign URL', async (span) => {
+    try {
+      const signed = await presignGetUrl(bucket, targetKey, presignTtlSeconds);
+      span.setAttribute('s3.presign.expiresIn', presignTtlSeconds);
 
-        log.info(
-          `Presign URL generated correcltly for product image ${originalKey}.`,
-          { originalKey },
-        );
+      log.info(`Presign URL generated correcltly for product image ${originalKey}.`, {originalKey});
 
-        return signed;
-      } finally {
-        span.end();
-      }
-    },
-  );
+      return signed;
+    } finally {
+      span.end();
+    }
+  });
 
   return { url, key: targetKey };
 }
@@ -151,27 +118,24 @@ async function handleProductImageRequest({
   presignTtlSeconds,
 }) {
   // 1) Get image name from DynamoDB
-  const imageName = await tracer.startActiveSpan(
-    "DynamoDB:GetItem - get product image filename",
-    async (span) => {
-      try {
-        const name = await getProductImageName({
-          tableName: table,
-          productId,
-          idAttr,
-          imageAttr,
-        });
-        span.setAttribute("dynmodb.productId", productId);
-        span.setAttribute("imageName", name || "");
-        return name;
-      } finally {
-        span.end();
-      }
-    },
-  );
+  const imageName = await tracer.startActiveSpan('DynamoDB:GetItem - get product image filename', async (span) => {
+    try {
+      const name = await getProductImageName({
+        tableName: table,
+        productId,
+        idAttr,
+        imageAttr,
+      });
+      span.setAttribute('dynmodb.productId', productId);
+      span.setAttribute('imageName', name || '');
+      return name;
+    } finally {
+      span.end();
+    }
+  });
 
   if (!imageName) {
-    throw new NotFoundError("Product or image name not found.", { productId });
+    throw new NotFoundError('Product or image name not found.', { productId });
   }
 
   // Ensure target image and presign URL
@@ -187,3 +151,4 @@ async function handleProductImageRequest({
 }
 
 module.exports = { handleProductImageRequest };
+
