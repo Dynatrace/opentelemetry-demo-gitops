@@ -31,6 +31,7 @@ provider "aws" {
       git-repository = "https://github.com/Dynatrace/opentelemetry-demo-gitops"
       dt_owner_email = "rafal.psciuk@dynatrace.com"
       dt_owner_team  = "team-demoability"
+      env            = local.environment
     }
   }
 }
