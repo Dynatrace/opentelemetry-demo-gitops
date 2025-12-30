@@ -9,7 +9,7 @@ terraform {
   required_version = "~> 1.12"
 
   backend "s3" {
-    key          = "demo-deployments/image-provider/staging/terraform.tfstate"
+    key          = "demo-deployments/image-provider/playground/terraform.tfstate"
     bucket       = "dt-demoability-terraform-backend"
     region       = "us-east-1"
     kms_key_id   = "alias/dt-demoability-backend-key"
@@ -20,7 +20,7 @@ terraform {
 
 provider "aws" {
   region                   = var.aws_region
-  shared_credentials_files = ["$HOME/.aws/credentials"]
+  # shared_credentials_files = ["$HOME/.aws/credentials"]
 
   ignore_tags {
     key_prefixes = ["ACE:"]
