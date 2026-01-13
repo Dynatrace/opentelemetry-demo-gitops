@@ -2,10 +2,10 @@ components:
   dt-credentials:
     # when enabled it requires the `collector_tenant_endpoint` and `collector_tenant_token` values to be set
     # when disabled make sure to create a `dt-credentials` secret with
-    # DT_OTEL_ENDPOINT and DT_INGEST_TOKEN values
+    # DT_ENDPOINT and DT_API_TOKEN values
     enabled: false
-    # collector_tenant_endpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
-    # collector_tenant_token: dt0c01.abc.xxx
+    # tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
+    # tenantToken: dt0c01.abc.xxx
   ingress:
     enabled: false
     # used for setting host in ingress, the url set in loadgen should match this
