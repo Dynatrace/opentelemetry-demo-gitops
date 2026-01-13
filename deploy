@@ -2,9 +2,9 @@
 
 if [ $# -lt 1 ]
 then
-    KUSTOMIZE_DIR="./kustomize/base"
+    KUSTOMIZE_DIR="$(pwd)/kustomize/base"
 else
-    KUSTOMIZE_DIR="./kustomize/overlays/$1"
+    KUSTOMIZE_DIR="$(pwd)/kustomize/overlays/$1"
     if [ ! -d $KUSTOMIZE_DIR ]
     then
         echo "There is no overlay for [$1]" >&2
@@ -12,7 +12,13 @@ else
     fi
 fi
 
+echo "generating kustomization yaml"
+
 kustomize build \
     --enable-helm \
     --load-restrictor LoadRestrictionsNone \
-    "${KUSTOMIZE_DIR}" | kubectl apply -f -
+    "${KUSTOMIZE_DIR}" > yaml/demo-astroshop.yaml
+
+echo "applying kustomization"
+    
+#kubectl apply -f yaml/demo-astroshop.yaml
