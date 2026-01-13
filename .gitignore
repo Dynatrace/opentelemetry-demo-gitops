@@ -8,6 +8,8 @@ kustomize/**/secrets.yaml
 internal/*.yaml
 !internal/test.yaml
 
+yaml/**
+
 node_modules
 build
 .terraform
