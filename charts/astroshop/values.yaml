@@ -445,9 +445,9 @@ opentelemetry-demo:
           sampling_initial: 5
           sampling_thereafter: 2000
         otlphttp:
-          endpoint: "${env:DT_OTEL_ENDPOINT}"
+          endpoint: "${env:DT_ENDPOINT}"
           headers:
-            Authorization: "Api-Token ${env:DT_INGEST_TOKEN}"
+            Authorization: "Api-Token ${env:DT_API_TOKEN}"
       extensions:
         health_check:
           endpoint: "0.0.0.0:13133"
