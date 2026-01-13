@@ -1,21 +1,32 @@
 <!-- 
 Collaboration notes & todos
 
+Fixes:
+[ ] secrets tenantEndpoint and tenantToken need to be setted otherwise generation fails.
+[ ] Renaming of secrets: tenantEndpoint -> DT_ENDPOINT ; tenantToken -> DT_API_TOKEN Should be renamed to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN problem is that for a consequent renaming the Helm chart needs to be renamed.
 
-Documentation:
-[ ] - Simplify documentation. Maybe add MKdocs? to have better user UX
-[ ] - Explain what this repo is about, documentation about new usecases, problem patterns. Point to the sourcecode where the helm charts are pointing to.
-[ ] - Add step by step doc, simplify options, use as default CNFS with only 3 vars, Environment URL, Ingest and Operator tokens.
 
+RFE
+[ ] - use the gitops repo as a fork from the original so argocd or any CICD tool does not clutter the repo with commits. 
+[ ] - Rename ENV vars to match conventions for OTEL_ENDPOINT and OTEL_INGEST_TOKEN.
+[ ] - If no OTELVars are defined we could deploy opensource stack so the app works.
+[ ] - Rename ENV vars to match conventions for Dynatrace components when deploying via Helm
+
+[ ] - Deployment using the generated YAML file, add to build script
+[ ] - remove kustomize and helm since the deployment is done with kubectl. No management of HELM
+[ ] - Add namespace in the kubectl apply the namespace is inconsistent.
+ 
 
 Repository changes:
-[x] - Renaming to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN of dt-secrets to keep consistency and avoid missinterpretations.
+
+[ ] - Renaming to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN of dt-secrets to keep consistency and avoid missinterpretations. (Helm Chart needs to be updated)
 [ ] - Enable frontend-proxy. Have this by default, fix missing images, envoy of different services, flagd, etc
 [ ] - Enhance deploy script to run automatically on 1 run, fail if vars are not defined.
-[y] - Deploy script (in framework code) - clone to this repo later 
-    [y] - helm repo add, update, builds 
-    [y] - check/install Kustomize
-    [y] - helm upgrade with env vars so they are not stored in YAML
+[ ] - Deploy script (in framework code) - clone to this repo later 
+    [ ] - Add generated YAML
+    [NN] - helm repo add, update, builds 
+    [NN] - check/install Kustomize
+    [NN] - helm upgrade with env vars so they are not stored in YAML
 
 [] - Flagd - expose Flagd-UI so Users can change the Problem Patterns easily.
     [] - UI explsed as side car in the helm values, 
@@ -25,6 +36,13 @@ Repository changes:
 [X] - Loadtest scaled down to 1 replica having 2 users, no problems detected on Kind
 [X] - Fraud Detection Memory Limits raised to 512Mi
 [X] - Active Gate Limits raised to 1 Gig (maybe use 2?)
+
+
+Documentation:
+[ ] - Simplify documentation. Maybe add MKdocs? to have better user UX
+[ ] - Explain what this repo is about, documentation about new usecases, problem patterns. Point to the sourcecode where the helm charts are pointing to.
+[ ] - Add step by step doc, simplify options, use as default CNFS with only 3 vars, Environment URL, Ingest and Operator tokens.
+
 
 
 ## Envoy troubleshoot
