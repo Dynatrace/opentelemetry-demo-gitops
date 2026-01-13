@@ -6,7 +6,7 @@ Fixes:
 [ ] Renaming of secrets: tenantEndpoint -> DT_ENDPOINT ; tenantToken -> DT_API_TOKEN Should be renamed to DT_OTEL_ENDPOINT and DT_INGEST_TOKEN problem is that for a consequent renaming the Helm chart needs to be renamed.
 
 
-RFE
+RFE:
 [ ] - use the gitops repo as a fork from the original so argocd or any CICD tool does not clutter the repo with commits. 
 [ ] - Rename ENV vars to match conventions for OTEL_ENDPOINT and OTEL_INGEST_TOKEN.
 [ ] - If no OTELVars are defined we could deploy opensource stack so the app works.
@@ -33,9 +33,11 @@ Repository changes:
     [] - SECRET_KEY_BASE added in base 64 
     [] - flagd-ui service added so it can be properly exposed in envoy
     Issue was that the envoy.yaml in the frontend-proxy has a flad-ui cluster defined but there is no endpoint for it, the flagdui is exposed as sidecar in the flagd service
-[X] - Loadtest scaled down to 1 replica having 2 users, no problems detected on Kind
-[X] - Fraud Detection Memory Limits raised to 512Mi
-[X] - Active Gate Limits raised to 1 Gig (maybe use 2?)
+
+[ ] - work on these since using a new branch    
+    [X] - Loadtest scaled down to 1 replica having 2 users, no problems detected on Kind
+    [X] - Fraud Detection Memory Limits raised to 512Mi
+    [X] - Active Gate Limits raised to 1 Gig (maybe use 2?)
 
 
 Documentation:
