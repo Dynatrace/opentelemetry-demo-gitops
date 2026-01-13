@@ -1,10 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
 
-configMapGenerator:
-  - name: flagd-config
-    behavior: replace
-    options:
-      disableNameSuffixHash: true
-    files:
-      - demo.flagd.json
+patches:
+  - path: ./configmap.yaml
+    target:
+      kind: ConfigMap
+      name: flagd-config
