@@ -12,7 +12,7 @@ else
     fi
 fi
 
-echo "generating kustomization yaml"
+echo "generating kustomization yaml dir $KUSTOMIZE_DIR "
 
 kustomize build \
     --enable-helm \
