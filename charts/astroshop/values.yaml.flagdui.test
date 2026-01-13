@@ -7,16 +7,9 @@ components:
     # collector_tenant_endpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp # example endpoint
     # collector_tenant_token: dt0c01.abc.xxx
   ingress:
-    enabled: false
+    enabled: true
     # used for setting host in ingress, the url set in loadgen should match this
     # host: ""
-    # you can use this for fine-grain control over which ingresses are created
-    # this only works when `ingress.enabled` is true
-    components:
-      root: true
-      images: true
-      feature-flags: true
-      flagd-ui: true
     # the ip whitelist used for the ingress
     # allows for limitting the allowed ips, leave empty to not add the restriction
     # two separate fields are given to allow for more complicated setups
@@ -35,7 +28,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop
-      tag: 5824c4b
+      tag: 237cf09
   components:
     # ---------------------------------------------------
     accounting:
@@ -52,7 +45,7 @@ opentelemetry-demo:
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
         requests:
-          cpu: 100m
+          cpu: 25m
           memory: 256Mi
         limits:
           cpu: 250m
@@ -110,7 +103,7 @@ opentelemetry-demo:
           value: "console,otlp" # 'console', 'none', 'otlp'
       resources:
         requests:
-          cpu: 250m
+          cpu: 25m
           memory: 64Mi
         limits:
           cpu: 250m
@@ -173,16 +166,36 @@ opentelemetry-demo:
       sidecarContainers:
         - name: flagd-ui
           useDefault:
-            env: true
+            env: false
           service:
             port: 4000
-          envOverrides:
+          env:
+            - name: OTEL_SERVICE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['app.kubernetes.io/component']
+            - name: OTEL_COLLECTOR_NAME
+              value: otel-collector
+            - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+              value: cumulative
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=$(OTEL_SERVICE_NAME),service.namespace=opentelemetry-demo,service.version=2.1.3
             - name: FLAGD_METRICS_EXPORTER
               value: otel
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: http://$(OTEL_COLLECTOR_NAME):4318
             - name: SECRET_KEY_BASE
               value: "fHaF1lg9V+fJh1C6OhYFqfs/9PpQxpr8dwRYZ86P9ZlEGiTAP33lhu1Ya6iow9v0"
+            - name: PHX_HOST
+              value: "localhost"
+            - name: PHX_PORT
+              value: "4000"
+            - name: PORT
+              value: "4000"
+            - name: FLAGD_UI_SERVICE_HOST
+              value: "127.0.0.1"
+            - name: FLAGD_UI_SERVICE_PORT
+              value: "4000"
           resources:
             limits:
               memory: 300Mi
@@ -235,7 +248,7 @@ opentelemetry-demo:
           value: "0" # This expects users to use `kubectl port-forward ...`
       resources:
         requests:
-          cpu: 800m
+          cpu: 500m
           memory: 300Mi
         limits:
           cpu: "1"
@@ -353,7 +366,7 @@ opentelemetry-demo:
         metadata.dynatrace.com/process.technology: "python"
       resources:
         requests:
-          cpu: 50m
+          cpu: 25m
           memory: 64Mi
         limits:
           cpu: 250m
