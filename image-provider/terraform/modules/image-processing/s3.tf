@@ -17,7 +17,7 @@ resource "aws_s3_object" "products" {
   ]...)
 
   bucket = aws_s3_bucket.products[each.value.category].bucket
-  key    = "${each.value.file}"
+  key    = "original/${each.value.file}"
   source = "../../../img/${each.value.category}/${each.value.file}"
   etag   = filemd5("../../../img/${each.value.category}/${each.value.file}")
 }

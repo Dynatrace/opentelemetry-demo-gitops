@@ -13,7 +13,7 @@ const tracer = trace.getTracer('product-image-lambda');
  */
 function buildKeys(screen, imageName) {
   return {
-    originalKey: imageName,
+    originalKey: `original/${imageName}`,
     targetKey: `${screen}/${imageName}`,
   };
 }
