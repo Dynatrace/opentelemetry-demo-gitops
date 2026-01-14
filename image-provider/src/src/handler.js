@@ -2,12 +2,12 @@ const { trace } = require("@opentelemetry/api");
 const { ValidationError, NotFoundError } = require("./errors");
 const {
   REGION,
-  BUCKET,
   PRODUCTS_TABLE,
   DDB_PRODUCT_ID_KEY,
-  DDB_IMAGE_ATTR,
+  DDB_BUCKET_ATTR,
   PRESIGN_TTL_SECONDS,
   DEFAULT_SCREEN,
+  BUCKET_MAPPING,
 } = require("./config");
 const { sanitizeScreen } = require("./util");
 const { handleProductImageRequest } = require("./getProductImage");
@@ -36,19 +36,20 @@ async function handler(event) {
     async (span) => {
       try {
         const qs = event?.queryStringParameters || {};
-        const productId = qs.productId;
+        const productImage = qs.productImage;
+        log.info("Image Name: " + productImage);
         const screen = sanitizeScreen(qs.screen, DEFAULT_SCREEN);
 
-        if (!productId) {
-          throw new ValidationError("Missing productId.");
+        if (!productImage) {
+          throw new ValidationError("Missing productImage.");
         }
 
         const { url, key } = await handleProductImageRequest({
-          bucket: BUCKET,
           table: PRODUCTS_TABLE,
           idAttr: DDB_PRODUCT_ID_KEY,
-          imageAttr: DDB_IMAGE_ATTR,
-          productId,
+          bucketAttr: DDB_BUCKET_ATTR,
+          bucketMapping: BUCKET_MAPPING,
+          productImage: productImage,
           screen,
           presignTtlSeconds: PRESIGN_TTL_SECONDS,
         });
@@ -59,7 +60,6 @@ async function handler(event) {
           headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
           body: JSON.stringify({
             url,
-            bucket: BUCKET,
             key,
             screen,
             region: REGION,

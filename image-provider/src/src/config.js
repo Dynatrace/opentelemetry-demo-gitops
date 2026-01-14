@@ -15,12 +15,21 @@ function getIntEnv(name, defaultVal) {
   return parsed;
 }
 
+function getBucketMapping() {
+  const bucketsJson = requireEnv("BUCKETS");
+  try {
+    return JSON.parse(bucketsJson);
+  } catch (err) {
+    throw new Error(`Failed to parse BUCKETS env var: ${err.message}`);
+  }
+}
+
 module.exports = {
   REGION,
-  BUCKET: requireEnv("BUCKET"),
   PRODUCTS_TABLE: requireEnv("PRODUCTS_TABLE"),
   DDB_PRODUCT_ID_KEY: "id",
-  DDB_IMAGE_ATTR: process.env.DDB_IMAGE_ATTR || "imageName",
+  DDB_BUCKET_ATTR: "bucket",
   PRESIGN_TTL_SECONDS: getIntEnv("PRESIGN_TTL_SECONDS", 900),
   DEFAULT_SCREEN: process.env.DEFAULT_SCREEN || "860x600",
+  BUCKET_MAPPING: getBucketMapping(),
 };
