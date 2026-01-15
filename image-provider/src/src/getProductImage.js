@@ -48,7 +48,7 @@ async function ensureTargetImage({
     }
   });
 
-  if (exists === false) {
+  if (exists !== true) {
     log.warn(`Image for screen size ${screen} not found under the path: ${targetKey}, resizing the original product image ${originalKey}.`, {
         key: targetKey,
         screen,
