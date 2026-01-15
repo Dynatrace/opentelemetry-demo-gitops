@@ -6,7 +6,7 @@ env:
   LAMBDA_TYPE: "cloud:aws:lambda"
 on:
   push:
-    branches: [test-serverless-pp]
+    branches: [main]
     paths:
       - image-provider/**
 
@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: [image-provider]
-        env: [playground-dev]
+        env: [staging, live, playground-dev, playground-staging, playground]
         include:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
