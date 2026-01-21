@@ -14,13 +14,13 @@ resource "aws_dynamodb_table" "this" {
 }
 
 resource "aws_dynamodb_table_item" "this" {
-  for_each = { for item in local.dynamodb_items : item.id => item }
+  for_each = { for item in local.dynamodb_items : item.image => item }
 
   table_name = aws_dynamodb_table.this.name
   hash_key   = aws_dynamodb_table.this.hash_key
 
   item = jsonencode({
-    id      = { S = each.value.id }
-    picture = { S = each.value.picture }
+    id     = { S = each.value.image }
+    bucket = { S = each.value.bucket }
   })
 }

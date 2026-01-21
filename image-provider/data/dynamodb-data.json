@@ -1,42 +1,42 @@
 [
     {
-        "id": "OLJCESPC7Z",
-        "picture": "NationalParkFoundationExplorascope.jpg"
+        "image": "NationalParkFoundationExplorascope.jpg",
+        "bucket": "telescopes"
     },
     {
-        "id": "66VCHSJNUP",
-        "picture": "StarsenseExplorer.jpg"
+        "image": "StarsenseExplorer.jpg",
+        "bucket": "telescopes"
     },
     {
-        "id": "1YMWWN1N4O",
-        "picture": "EclipsmartTravelRefractorTelescope.jpg"
+        "image": "EclipsmartTravelRefractorTelescope.jpg",
+        "bucket": "telescopes"
     },
     {
-        "id": "L9ECAV7KIM",
-        "picture": "LensCleaningKit.jpg"
+        "image": "LensCleaningKit.jpg",
+        "bucket": "accessories"
     },
     {
-        "id": "2ZYFJ3GM2N",
-        "picture": "RoofBinoculars.jpg"
+        "image": "RoofBinoculars.jpg",
+        "bucket": "telescopes"
     },
     {
-        "id": "0PUK6V6EV0",
-        "picture": "SolarSystemColorImager.jpg"
+        "image": "SolarSystemColorImager.jpg",
+        "bucket": "accessories"
     },
     {
-        "id": "LS4PSXUNUM",
-        "picture": "RedFlashlight.jpg"
+        "image": "RedFlashlight.jpg",
+        "bucket": "accessories"
     },
     {
-        "id": "9SIQT8TOJO",
-        "picture": "OpticalTubeAssembly.jpg"
+        "image": "OpticalTubeAssembly.jpg",
+        "bucket": "telescopes"
     },
     {
-        "id": "6E92ZMYYFZ",
-        "picture": "SolarFilter.jpg"
+        "image": "SolarFilter.jpg",
+        "bucket": "accessories"
     },
     {
-        "id": "HQTGWGPNH4",
-        "picture": "TheCometBook.jpg"
+        "image": "TheCometBook.jpg",
+        "bucket": "accessories"
     }
 ]

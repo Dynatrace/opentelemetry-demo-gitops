@@ -24,7 +24,7 @@ resource "aws_iam_role_policy" "access_s3_bucket" {
     Statement = [
       {
         Effect : "Allow"
-        Resource = "${aws_s3_bucket.this.arn}/*"
+        Resource = [for bucket in aws_s3_bucket.products : "${bucket.arn}/*"]
         Action = [
           "s3:GetObject",
           "s3:PutObject",
@@ -33,7 +33,7 @@ resource "aws_iam_role_policy" "access_s3_bucket" {
       },
       {
         Effect : "Allow"
-        Resource = "${aws_s3_bucket.this.arn}"
+        Resource = [for bucket in aws_s3_bucket.products : bucket.arn]
         Action = [
           "s3:ListBucket"
         ]

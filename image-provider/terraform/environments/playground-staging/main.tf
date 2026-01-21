@@ -42,7 +42,6 @@ module "image_processing" {
   source                       = "../../modules/image-processing"
   environment                  = local.environment
   aws_region                   = var.aws_region
-  image_resize_problem_flag    = var.image_resize_problem_flag
   lambda_layer_arn             = local.lambda_layer_arn
   private_subnet_name          = local.private_subnet_name
   dynatrace_tenant             = module.secrets.dynatrace_tenant

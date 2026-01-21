@@ -1,7 +1,7 @@
 const { trace } = require('@opentelemetry/api');
 const { NotFoundError } = require('./errors');
 const { inferContentType } = require('./util');
-const { getProductImageName } = require('./aws/ddb');
+const { getProductBucket } = require('./aws/ddb');
 const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require('./aws/s3');
 
 const log = require('./logger');
@@ -24,7 +24,7 @@ function buildKeys(screen, imageName) {
 async function ensureTargetImage({
   bucket,
   screen,
-  productId,
+  productImage,
   imageName,
   presignTtlSeconds,
 }) {
@@ -81,7 +81,7 @@ async function ensureTargetImage({
           await putObject(bucket, targetKey, originalBuf, contentType, {
             source: 'lambda-resizer',
             screen,
-            productId: String(productId),
+            productImage: String(productImage),
           });
           putSpan.end();
         });
@@ -109,41 +109,49 @@ async function ensureTargetImage({
 }
 
 async function handleProductImageRequest({
-  bucket,
   table,
   idAttr,
-  imageAttr,
-  productId,
+  bucketAttr,
+  bucketMapping,
+  productImage,
   screen,
   presignTtlSeconds,
 }) {
-  // 1) Get image name from DynamoDB
-  const imageName = await tracer.startActiveSpan('DynamoDB:GetItem - get product image filename', async (span) => {
+  // 1) Get bucket category from DynamoDB
+  const genericBucket = await tracer.startActiveSpan('DynamoDB:GetItem - get product bucket', async (span) => {
     try {
-      const name = await getProductImageName({
+      const bucket = await getProductBucket({
         tableName: table,
-        productId,
+        productImage,
         idAttr,
-        imageAttr,
+        bucketAttr,
       });
-      span.setAttribute('dynmodb.productId', productId);
-      span.setAttribute('imageName', name || '');
-      return name;
+      span.setAttribute('dynamodb.productImage', productImage);
+      span.setAttribute('bucket', bucket || '');
+      return bucket;
     } finally {
       span.end();
     }
   });
 
-  if (!imageName) {
-    throw new NotFoundError('Product or image name not found.', { productId });
+  if (!genericBucket) {
+    throw new NotFoundError('Product image not found.', { productImage });
   }
 
-  // Ensure target image and presign URL
+  // 2) Map generic bucket name to actual environment-specific bucket
+  const actualBucket = bucketMapping[genericBucket];
+  if (!actualBucket) {
+    throw new Error(`Unknown bucket category: ${genericBucket}. Available: ${Object.keys(bucketMapping).join(', ')}`);
+  }
+
+  log.info(`Mapped bucket: ${genericBucket} -> ${actualBucket}`, { productImage });
+
+  // 3) Ensure target image and presign URL
   const { url, key } = await ensureTargetImage({
-    bucket,
+    bucket: actualBucket,
     screen,
-    productId,
-    imageName,
+    productImage,
+    imageName: productImage, // Use productImage as the filename
     presignTtlSeconds,
   });
 
