@@ -17,7 +17,6 @@ resource "aws_lambda_function" "this" {
   environment {
     variables = {
       AWS_LAMBDA_EXEC_WRAPPER : "/opt/dynatrace"
-      IMAGE_RESIZE_PROBLEM_FLAG : var.image_resize_problem_flag
       OTEL_SERVICE_NAME : "image-processing-lambda"
       BUCKETS : jsonencode({ for k, v in aws_s3_bucket.products : k => v.bucket })
       PRODUCTS_TABLE : aws_dynamodb_table.this.name
