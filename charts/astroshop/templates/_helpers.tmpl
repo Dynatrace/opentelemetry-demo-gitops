@@ -16,3 +16,18 @@ nginx.ingress.kubernetes.io/whitelist-source-range: {{ $whitelist }}
 {{- $port := index .Values "opentelemetry-demo" "components" "valkey-cart" "ports" 0 "value" -}}
 {{- printf "%s:%s" $name (toString $port) -}}
 {{- end -}}
+
+{{- define "opentelemetry-demo.ingressTls" -}}
+{{- if .Values.components.ingress.secretName }}
+tls:
+  - hosts:
+      - $host
+    secretName: {{ .Values.components.ingress.secretName }}
+{{- end }}
+{{- end -}}
+
+{{- define "opentelemetry-demo.ingressCustomAnnotations" -}}
+{{- with .Values.components.ingress.annotations }}
+{{- toYaml . | nindent 4 }}
+{{- end }}
+{{- end -}}
