@@ -42,12 +42,7 @@ metadata:
     {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
-  {{- if .Values.components.ingress.secretName }}
-  tls:
-    - hosts:
-        - {{ $host }}
-      secretName: {{ .Values.components.ingress.secretName }}
-  {{- end }}
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -73,12 +68,7 @@ metadata:
     {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
-  {{- if .Values.components.ingress.secretName }}
-  tls:
-    - hosts:
-        - {{ $host }}
-      secretName: {{ .Values.components.ingress.secretName }}
-  {{- end }}
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -105,12 +95,7 @@ metadata:
     {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
-  {{- if .Values.components.ingress.secretName }}
-  tls:
-    - hosts:
-        - {{ $host }}
-      secretName: {{ .Values.components.ingress.secretName }}
-  {{- end }}
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -136,12 +121,7 @@ metadata:
     {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
-  {{- if .Values.components.ingress.secretName }}
-  tls:
-    - hosts:
-        - {{ $host }}
-      secretName: {{ .Values.components.ingress.secretName }}
-  {{- end }}
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:

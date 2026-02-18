@@ -19,10 +19,10 @@ nginx.ingress.kubernetes.io/whitelist-source-range: {{ $whitelist }}
 
 {{- define "opentelemetry-demo.ingressTls" -}}
 {{- if .Values.components.ingress.secretName }}
-tls:
-  - hosts:
-      - $host
-    secretName: {{ .Values.components.ingress.secretName }}
+  tls:
+    - hosts:
+        - {{ .Values.components.ingress.host }}
+      secretName: {{ .Values.components.ingress.secretName }}
 {{- end }}
 {{- end -}}
 
