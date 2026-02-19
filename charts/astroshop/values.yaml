@@ -8,6 +8,11 @@ components:
     # tenantToken: dt0c01.abc.xxx
   ingress:
     enabled: false
+    # annotations to add to the ingress resource (e.g., cert-manager.io/cluster-issuer)
+    # annotations: {}
+    # name of the TLS secret containing the certificate and key for HTTPS
+    # secretName: ""
+    
     # used for setting host in ingress, the url set in loadgen should match this
     # host: ""
     # you can use this for fine-grain control over which ingresses are created
