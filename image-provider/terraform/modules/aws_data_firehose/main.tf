@@ -9,7 +9,7 @@ data "external" "find_aws_firehose" {
 
 # Create an IAM role for CloudWatch Logs to assume when writing to the Firehose
 resource "aws_iam_role" "fh_put_record_role" {
-  name = "dac-logs-ingest-${var.firehose_name_filter}-role"
+  name = "${var.common_prefix}-${var.firehose_name_filter}-role"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -26,7 +26,7 @@ resource "aws_iam_role" "fh_put_record_role" {
 }
 
 resource "aws_iam_role_policy" "fh_put_record_policy" {
-  name = "dac-logs-ingest-${var.firehose_name_filter}-policy"
+  name = "${var.common_prefix}-${var.firehose_name_filter}-policy"
   role = aws_iam_role.fh_put_record_role.id
 
   policy = jsonencode({

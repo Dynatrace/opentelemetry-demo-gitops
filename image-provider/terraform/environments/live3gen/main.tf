@@ -44,6 +44,7 @@ module "firehose" {
   source = "../../modules/aws_data_firehose"
 
   firehose_name_filter = local.dynatrace_tenant_id
+  common_prefix = "dac-logs-image-processing"
 }
 
 module "image_processing" {
