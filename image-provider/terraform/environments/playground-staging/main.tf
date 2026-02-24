@@ -42,8 +42,8 @@ module "firehose" {
   count  = local.enable_dac_logs ? 1 : 0
   source = "../../modules/aws_data_firehose"
 
-  firehose_name_filter = local.dynatrace_tenant_id
-  common_prefix = "dac-logs-image-processing"
+  firehose_name_filter = module.secrets.dynatrace_tenant
+  common_prefix        = "dac-logs-image-processing"
 }
 
 module "image_processing" {
