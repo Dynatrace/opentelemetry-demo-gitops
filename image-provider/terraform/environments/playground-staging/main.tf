@@ -38,6 +38,14 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+module "firehose" {
+  count  = local.enable_dac_logs ? 1 : 0
+  source = "../../modules/aws_data_firehose"
+
+  firehose_name_filter = local.dynatrace_tenant_id
+  common_prefix = "dac-logs-image-processing"
+}
+
 module "image_processing" {
   source                       = "../../modules/image-processing"
   environment                  = local.environment
@@ -50,6 +58,9 @@ module "image_processing" {
   dt_connection_auth_token     = module.secrets.dt_connection_auth_token
   dt_log_collection_auth_token = module.secrets.dt_log_collection_auth_token
   aws_account_id               = data.aws_caller_identity.current.account_id
+  enable_dac_logs              = local.enable_dac_logs
+  dac_firehose_arn             = local.enable_dac_logs ? module.firehose[0].firehose_arn : null
+  dac_ingest_role_arn          = local.enable_dac_logs ? module.firehose[0].ingest_role_arn : null
 }
 
 module "secrets" {
