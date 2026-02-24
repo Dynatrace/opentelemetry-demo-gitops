@@ -3,4 +3,6 @@ locals {
   environment                   = "live3gen"
   lambda_monitoring_secret_name = "lambda-monitoring-live3gen"
   private_subnet_name           = "private-subnet-1"
+  enable_dac_logs               = true
+  dynatrace_tenant_id           = regex("^https?://(?P<tenant>[^./]+)", module.secrets.dt_connection_base_url).tenant
 }
