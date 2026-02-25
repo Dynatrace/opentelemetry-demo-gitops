@@ -1,5 +1,7 @@
 {{- if .Values.components.ingress.enabled -}}
-{{- $annotation := include "opentelemetry-demo.ingressWhitelistAnnotation" . -}}
+{{- $ipWhitelistAnnotation := include "opentelemetry-demo.ingressWhitelistAnnotation" . -}}
+{{- $customAnnotations := include "opentelemetry-demo.ingressCustomAnnotations" . -}}
+{{- $ingressTls := include "opentelemetry-demo.ingressTls" . -}}
 {{- $host := required "[host] is required when [ingress] is enabled" .Values.components.ingress.host -}}
 {{- if .Values.components.ingress.components.root -}}
 ---
@@ -9,10 +11,12 @@ metadata:
   name: frontendproxy-root
   namespace: "{{ .Release.Namespace }}"
   annotations:
-    {{ $annotation }}
+    {{ $ipWhitelistAnnotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /
+    {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -33,10 +37,12 @@ metadata:
   name: frontendproxy-rewrite-images
   namespace: "{{ .Release.Namespace }}"
   annotations:
-    {{ $annotation }}
+    {{ $ipWhitelistAnnotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -57,10 +63,12 @@ metadata:
   name: frontendproxy-rewrite-feature
   namespace: "{{ .Release.Namespace }}"
   annotations:
-    {{ $annotation }}
+    {{ $ipWhitelistAnnotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -79,13 +87,15 @@ metadata:
   name: frontendproxy-rewrite-feature-websocket
   namespace: "{{ .Release.Namespace }}"
   annotations:
-    {{ $annotation }}
+    {{ $ipWhitelistAnnotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /live/$2
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1" # Enable HTTP/1.1 for WebSocket support
+    {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
@@ -106,10 +116,12 @@ metadata:
   name: frontendproxy-rewrite-flags
   namespace: "{{ .Release.Namespace }}"
   annotations:
-    {{ $annotation }}
+    {{ $ipWhitelistAnnotation }}
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{ $customAnnotations }}
 spec:
   ingressClassName: nginx
+  {{ $ingressTls }}
   rules:
     - host: {{ $host }}
       http:
