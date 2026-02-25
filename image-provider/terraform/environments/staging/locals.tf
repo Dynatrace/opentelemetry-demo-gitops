@@ -3,4 +3,5 @@ locals {
   environment                   = "staging"
   lambda_monitoring_secret_name = "lambda-monitoring-staging"
   private_subnet_name           = "private-subnet-1"
+  enable_dac_logs               = true
 }

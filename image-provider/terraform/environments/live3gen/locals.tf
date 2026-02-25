@@ -3,4 +3,5 @@ locals {
   environment                   = "live3gen"
   lambda_monitoring_secret_name = "lambda-monitoring-live3gen"
   private_subnet_name           = "private-subnet-1"
+  enable_dac_logs               = true
 }

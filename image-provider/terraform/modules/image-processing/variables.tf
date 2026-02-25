@@ -46,3 +46,20 @@ variable "aws_account_id" {
   description = "The AWS account ID"
 }
 
+variable "enable_dac_logs" {
+  type        = bool
+  description = "Whether to enable DAC logs collection in product catalog module"
+  default     = false
+}
+
+variable "dac_firehose_arn" {
+  type        = string
+  description = "ARN of the DAC Firehose to inject logs from AWS to Dynatrace."
+  default     = ""
+}
+
+variable "dac_ingest_role_arn" {
+  type        = string
+  description = "ARN of the IAM role to be assumed by CloudWatch Logs for writing to the DAC Firehose."
+  default     = ""
+}

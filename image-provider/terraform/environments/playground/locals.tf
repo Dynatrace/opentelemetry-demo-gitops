@@ -3,4 +3,5 @@ locals {
   environment                   = "playground"
   lambda_monitoring_secret_name = "lambda-monitoring-playground"
   private_subnet_name           = "private-subnet-1"
+  enable_dac_logs               = true
 }

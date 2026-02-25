@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: [image-provider]
-        env: [staging, live, playground-dev, playground-staging, playground]
+        env: [staging, live, live3gen, playground-dev, playground-staging, playground]
         include:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
@@ -29,6 +29,9 @@ jobs:
           - env: live
             dt_url_secret: "DT_URL_LIVE"
             dt_token_secret: "DT_TOKEN_LIVE"            
+          - env: live3gen
+            dt_url_secret: "DT_URL_LIVE3GEN"
+            dt_token_secret: "DT_TOKEN_LIVE3GEN"
           - env: playground-dev
             dt_url_secret: "DT_URL_PLAYGROUND_DEV"
             dt_token_secret: "DT_TOKEN_PLAYGROUND_DEV"
