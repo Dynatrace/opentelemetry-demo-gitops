@@ -24,7 +24,7 @@
     "@opentelemetry/sdk-trace-base": "1.22.0",
     "@opentelemetry/sdk-trace-node": "1.22.0",
     "@opentelemetry/semantic-conventions": "^1.22.0",
-    "axios": "^1.6.0",
+    "axios": "^1.13.5",
     "sharp": "^0.33.0",
     "winston": "^3.18.3"
   },
