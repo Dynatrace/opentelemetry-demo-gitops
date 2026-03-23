@@ -6,7 +6,7 @@ const {
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { s3 } = require("./clients");
-const { log } = require("../logger");
+const log = require('../logger');
 const { streamToBuffer } = require("../util");
 
 /**
@@ -16,8 +16,9 @@ async function objectExists(bucket, key) {
   try {
     await s3.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
     return true;
-  } catch {
-    return false;
+  } catch (error) {
+    log.error('Error checking if object exists in S3', { error, bucket, key });
+    throw error;
   }
 }
 

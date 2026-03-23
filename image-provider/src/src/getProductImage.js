@@ -43,6 +43,9 @@ async function ensureTargetImage({
         });
       }
       return found;
+      } catch (error){
+        log.error('Error checking if target image exists in S3', { error, bucket, targetKey });
+        throw error;
     } finally {
       span.end();
     }
@@ -85,6 +88,9 @@ async function ensureTargetImage({
           });
           putSpan.end();
         });
+      } catch (error) {
+        log.error('Error during image resizing/uploading process', { error, bucket, originalKey, targetKey, screen });
+        throw error;
       } finally {
         span.end();
       }
