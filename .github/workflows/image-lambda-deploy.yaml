@@ -49,4 +49,4 @@ jobs:
                 github.ref: ${{ github.ref }}
                 github.event_name: ${{ github.event_name }}
                 github.commit: ${{ github.sha }}
-                terraform.outcome: ${{ steps.tf_apply.outcome }}
+                terraform.outcome: "no changes"
