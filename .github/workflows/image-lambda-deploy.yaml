@@ -6,7 +6,7 @@ env:
   LAMBDA_TYPE: "cloud:aws:lambda"
 on:
   push:
-    branches: [main]
+    branches: [main, debug]
     paths:
       - image-provider/**
 
@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: [image-provider]
-        env: [staging, live, live3gen, playground-dev, playground-staging, playground]
+        env: [live3gen]
         include:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
@@ -50,77 +50,8 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Determine changes
-        id: check_changes
-        run: |
-          ENV_DIR=${{ matrix.dir }}/terraform/environments
-          GENERAL_CHANGES=$(git diff --name-only ${{ github.sha }}^ ${{ github.sha }} -- ":(exclude)$ENV_DIR")
-
-          if [[ -n "$GENERAL_CHANGES" ]]; then
-            echo "Lambda implementation changes detected, proceeding with deployment"
-            echo "skip=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          ENV_CHANGES=$(git diff --name-only ${{ github.sha }}^ ${{ github.sha }} -- $ENV_DIR/${{ matrix.env }})
-
-          if [[ -z "$ENV_CHANGES" ]]; then
-            echo "No changes for ${{ matrix.env }}, skipping deployment"
-            echo "skip=true" >> $GITHUB_OUTPUT
-          else
-            echo "Changes for ${{ matrix.env }} detected, proceeding with deployment"
-            echo "skip=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Configure AWS credentials from AWS account
-        id: aws_auth
-        if: steps.check_changes.outputs.skip == 'false'
-        uses: aws-actions/configure-aws-credentials@v5.1.0
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          role-session-name: GitHub-OIDC-TERRAFORM
-
-      - name: Set up Node.js
-        id: setup_node
-        if: steps.aws_auth.outcome == 'success'
-        uses: actions/setup-node@v6.0.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Prepare dependencies
-        id: deps_build
-        if: steps.setup_node.outcome == 'success'
-        working-directory: ${{ matrix.dir }}/src
-        run: npm ci --omit-dev
-
-      - name: Set up Terraform
-        if: steps.deps_build.outcome == 'success'
-        uses: hashicorp/setup-terraform@v3.1.2
-        with:
-          terraform_version: ${{ env.TF_VERSION }}
-
-      - name: Terraform init
-        if: steps.check_changes.outputs.skip == 'false'
-        working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
-        id: tf_init
-        run: terraform init
-
-      - name: Terraform plan
-        if: steps.tf_init.outcome == 'success'
-        working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
-        id: tf_plan
-        run: terraform plan -no-color
-
-      - name: Terraform apply
-        if: steps.tf_plan.outcome == 'success'
-        working-directory: ${{ matrix.dir }}/terraform/environments/${{ matrix.env }}
-        id: tf_apply
-        run: terraform apply -no-color -auto-approve
-
       - name: Send events to Dynatrace
-        if: steps.tf_apply.outcome == 'success'
-        uses: dynatrace-oss/dynatrace-github-action@v9.1
+        uses: dczupryn-dt/dynatrace-github-action@fix-no-events-injected
         with:
           url: ${{ secrets[matrix.dt_url_secret] }}
           token: ${{ secrets[matrix.dt_token_secret] }}
