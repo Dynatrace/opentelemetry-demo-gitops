@@ -49,4 +49,4 @@ jobs:
                 github.ref: ${{ github.ref }}
                 github.event_name: ${{ github.event_name }}
                 github.commit: ${{ github.sha }}
-                terraform.outcome: "no changes - skipping deployment"
+                terraform.outcome: "no changes"
