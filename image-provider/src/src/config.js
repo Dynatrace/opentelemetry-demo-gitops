@@ -24,12 +24,10 @@ function getBucketMapping() {
   }
 }
 
-module.exports = {
-  REGION,
-  PRODUCTS_TABLE: requireEnv("PRODUCTS_TABLE"),
-  DDB_PRODUCT_ID_KEY: "id",
-  DDB_BUCKET_ATTR: "bucket",
-  PRESIGN_TTL_SECONDS: getIntEnv("PRESIGN_TTL_SECONDS", 900),
-  DEFAULT_SCREEN: process.env.DEFAULT_SCREEN || "860x600",
-  BUCKET_MAPPING: getBucketMapping(),
-};
+export const PRODUCTS_TABLE = requireEnv("PRODUCTS_TABLE");
+export const DDB_PRODUCT_ID_KEY = "id";
+export const DDB_BUCKET_ATTR = "bucket";
+export const PRESIGN_TTL_SECONDS = getIntEnv("PRESIGN_TTL_SECONDS", 900);
+export const DEFAULT_SCREEN = process.env.DEFAULT_SCREEN || "860x600";
+export const BUCKET_MAPPING = getBucketMapping();
+export { REGION };

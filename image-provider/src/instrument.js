@@ -1,33 +1,25 @@
-const process = require("process");
-const { NodeSDK } = require("@opentelemetry/sdk-node");
-const { BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
-const {
-  OTLPTraceExporter,
-} = require("@opentelemetry/exporter-trace-otlp-http");
-const { W3CTraceContextPropagator } = require("@opentelemetry/core");
-const {
-  AwsInstrumentation,
-} = require("@opentelemetry/instrumentation-aws-sdk");
-const {
-  WinstonInstrumentation,
-} = require("@opentelemetry/instrumentation-winston");
-const {
-  SEMRESATTRS_SERVICE_NAME,
-} = require("@opentelemetry/semantic-conventions");
-const { awsEc2DetectorSync } = require("@opentelemetry/resource-detector-aws");
-const {
+import process from "process";
+import { NodeSDK } from "@opentelemetry/sdk-node";
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+import { W3CTraceContextPropagator } from "@opentelemetry/core";
+import { AwsInstrumentation } from "@opentelemetry/instrumentation-aws-sdk";
+import { WinstonInstrumentation } from "@opentelemetry/instrumentation-winston";
+import { ATTR_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
+import { awsEc2DetectorSync } from "@opentelemetry/resource-detector-aws";
+import { 
   Resource,
   detectResourcesSync,
   envDetectorSync,
   hostDetectorSync,
   processDetectorSync,
-} = require("@opentelemetry/resources");
-const logsAPI = require("@opentelemetry/api-logs");
-const {
+} from "@opentelemetry/resources";
+import logsAPI from "@opentelemetry/api-logs";
+import {
   LoggerProvider,
   SimpleLogRecordProcessor,
   ConsoleLogRecordExporter,
-} = require("@opentelemetry/sdk-logs");
+} from "@opentelemetry/sdk-logs";
 
 const _traceExporter = new OTLPTraceExporter();
 const _spanProcessor = new BatchSpanProcessor(_traceExporter);
@@ -67,7 +59,7 @@ async function nodeSDKBuilder() {
 
   const sdk = new NodeSDK({
     resource: new Resource({
-      [SEMRESATTRS_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME,
+      [ATTR_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME,
     }),
     textMapPropagator: new W3CTraceContextPropagator(),
     instrumentations: [

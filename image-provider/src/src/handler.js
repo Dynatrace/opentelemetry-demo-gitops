@@ -1,18 +1,10 @@
-const { trace } = require("@opentelemetry/api");
-const { ValidationError, NotFoundError } = require("./errors");
-const {
-  REGION,
-  PRODUCTS_TABLE,
-  DDB_PRODUCT_ID_KEY,
-  DDB_BUCKET_ATTR,
-  PRESIGN_TTL_SECONDS,
-  DEFAULT_SCREEN,
-  BUCKET_MAPPING,
-} = require("./config");
-const { sanitizeScreen } = require("./util");
-const { handleProductImageRequest } = require("./getProductImage");
+import { trace } from "@opentelemetry/api";
+import { ValidationError, NotFoundError } from "./errors.js";
+import { REGION, PRODUCTS_TABLE, DDB_PRODUCT_ID_KEY, DDB_BUCKET_ATTR, PRESIGN_TTL_SECONDS, DEFAULT_SCREEN, BUCKET_MAPPING } from "./config.js";
+import { sanitizeScreen } from "./util.js";
+import { handleProductImageRequest } from "./getProductImage.js";
 
-const log = require("./logger");
+import log from "./logger.js";
 
 const tracer = trace.getTracer("product-image-lambda");
 
@@ -104,4 +96,4 @@ async function handler(event) {
   );
 }
 
-module.exports = { handler };
+export { handler };
