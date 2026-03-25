@@ -1,5 +1,6 @@
 // logger.js
-import { createLogger, format, transports } from "winston";
+const { createLogger, format, transports } = require("winston");
+const { trace, context } = require("@opentelemetry/api");
 
 // Accept only known Winston levels; default to info
 const VALID_LEVELS = new Set([
@@ -52,4 +53,4 @@ logger.info("Logger initialized", {
   loglevel: toLogLevelUpper(logger.level),
 });
 
-export default logger;
+module.exports = logger;

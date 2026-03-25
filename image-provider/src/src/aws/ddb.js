@@ -1,7 +1,7 @@
 // src/aws/ddb.js
-import { GetItemCommand } from "@aws-sdk/client-dynamodb";
-import { ddb } from "./clients.js";
-import log from "../logger.js"; 
+const { GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { ddb } = require("./clients");
+const { log } = require("../logger");
 
 /**
  * Get the bucket name for a given productImage.
@@ -39,4 +39,4 @@ async function getProductBucket({
   return bucket;
 }
 
-export { getProductBucket };
+module.exports = { getProductBucket };

@@ -1,4 +1,4 @@
-import path from "node:path";
+const path = require("node:path");
 
 /**
  * Whitelist sanitizer for screen param, e.g., "860x600".
@@ -41,7 +41,7 @@ async function streamToBuffer(stream) {
   });
 }
 
-export {
+module.exports = {
   sanitizeScreen,
   inferContentType,
   streamToBuffer,

@@ -1,9 +1,13 @@
 // src/aws/s3.js
-import { HeadObjectCommand, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { s3 } from "./clients.js";
-import log from "../logger.js";
-import { streamToBuffer } from "../util.js";
+const {
+  HeadObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { s3 } = require("./clients");
+const log = require('../logger');
+const { streamToBuffer } = require("../util");
 
 /**
  * Check if an object exists via HeadObject
@@ -51,7 +55,7 @@ async function presignGetUrl(bucket, key, expiresInSeconds) {
   return getSignedUrl(s3, cmd, { expiresIn: expiresInSeconds });
 }
 
-export {
+module.exports = {
   objectExists,
   getObjectBuffer,
   putObject,

@@ -1,8 +1,8 @@
-import { S3Client } from "@aws-sdk/client-s3";
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { REGION } from "../config.js";
+const { S3Client } = require("@aws-sdk/client-s3");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { REGION } = require("../config");
 
 const s3 = new S3Client({ region: REGION });
 const ddb = new DynamoDBClient({ region: REGION });
 
-export{ s3, ddb };
+module.exports = { s3, ddb };

@@ -1,1 +1,2 @@
-export { handler } from "./src/handler.js";
+const { handler } = require("./src/handler");
+exports.handler = handler;

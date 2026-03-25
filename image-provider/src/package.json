@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "AWS Lambda function to resize images with OpenTelemetry instrumentation",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "format": "prettier --write ."

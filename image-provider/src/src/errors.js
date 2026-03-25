@@ -14,4 +14,4 @@ class ValidationError extends Error {
   }
 }
 
-export { NotFoundError, ValidationError };
+module.exports = { NotFoundError, ValidationError };
