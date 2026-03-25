@@ -6,7 +6,7 @@ const {
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { s3 } = require("./clients");
-const log = require('../logger');
+const log = require("../logger");
 const { streamToBuffer } = require("../util");
 
 /**

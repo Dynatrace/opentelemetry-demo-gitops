@@ -1,13 +1,12 @@
-const { trace } = require('@opentelemetry/api');
-const { NotFoundError } = require('./errors');
-const { inferContentType } = require('./util');
-const { getProductBucket } = require('./aws/ddb');
-const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require('./aws/s3');
+const { trace } = require("@opentelemetry/api");
+const { NotFoundError } = require("./errors");
+const { inferContentType } = require("./util");
+const { getProductBucket } = require("./aws/ddb");
+const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require("./aws/s3");
 
-const log = require('./logger');
+const log = require("./logger");
 
-const tracer = trace.getTracer('product-image-lambda');
-
+const tracer = trace.getTracer("product-image-lambda");
 /**
  * Build S3 keys for original and target sizes.
  */
@@ -44,7 +43,7 @@ async function ensureTargetImage({
       }
       return found;
       } catch (error){
-        log.error('Error checking if target image exists in S3', { error, bucket, targetKey });
+        log.error(`Error looking for image for screen size ${screen}`, { error, bucket, targetKey });
         throw error;
     } finally {
       span.end();
@@ -89,7 +88,7 @@ async function ensureTargetImage({
           putSpan.end();
         });
       } catch (error) {
-        log.error('Error during image resizing/uploading process', { error, bucket, originalKey, targetKey, screen });
+        log.error(`Error with accessing S3 bucket for screen size ${screen}`, { error, bucket, originalKey, targetKey, screen });
         throw error;
       } finally {
         span.end();
