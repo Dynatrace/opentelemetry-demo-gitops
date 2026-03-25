@@ -41,7 +41,7 @@ jobs:
           events: |
             - title: Github Actions for ${{ github.workflow }}
               type: CUSTOM_DEPLOYMENT
-              entitySelector: type(SERVICE), entityName.startsWith("image-provider-")
+              entitySelector: type(SERVICE), entityName.startsWith("image-provider-${{ matrix.env }}")
               properties:
                 source: GitHub
                 event.description: Image processing problem trigger from [PR](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
