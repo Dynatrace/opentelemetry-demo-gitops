@@ -2,8 +2,7 @@ name: "Image lambda deployment"
 env:
   TF_VERSION: 1.13.4
   NODE_VERSION: "24.11.0"
-  LAMBDA_TAG: "[AWS]git-repository:https://github.com/Dynatrace/opentelemetry-demo-gitops"
-  LAMBDA_TYPE: "cloud:aws:lambda"
+  AWS_REGION: "us-east-1"
 on:
   push:
     branches: [main]
@@ -127,7 +126,7 @@ jobs:
           events: |
             - title: Github Actions for ${{ github.workflow }}
               type: CUSTOM_DEPLOYMENT
-              entitySelector: type(SERVICE), fromRelationships.runsOn(type(${{env.LAMBDA_TYPE}}), tag(${{env.LAMBDA_TAG}}))
+              entitySelector: type(SERVICE), entityName.equals("image-provider-${{ matrix.env }} in ${{ env.AWS_REGION }}")
               properties:
                 source: GitHub
                 event.description: Image processing problem trigger from [PR](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
