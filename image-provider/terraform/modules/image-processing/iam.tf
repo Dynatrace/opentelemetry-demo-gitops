@@ -14,7 +14,6 @@ resource "aws_iam_role" "this" {
     ]
   })
 }
-
 resource "aws_iam_role_policy" "access_s3_bucket" {
   name = "${local.name_prefix}-access-s3-bucket"
   role = aws_iam_role.this.id
@@ -29,6 +28,13 @@ resource "aws_iam_role_policy" "access_s3_bucket" {
           "s3:GetObject",
           "s3:PutObject",
           "s3:PutObjectTagging"
+        ]
+      },
+      {
+        Effect : "Allow"
+        Resource = [for bucket in aws_s3_bucket.products : bucket.arn]
+        Action = [
+          "s3:ListBucket"
         ]
       }
     ]
@@ -88,7 +94,7 @@ resource "aws_iam_role_policy" "dynamodb_read_only_access" {
     Statement = [
       {
         Effect : "Allow"
-        Resource = aws_dynamodb_table.this.arn
+        Resource = "${aws_dynamodb_table.this.arn}"
         Action = [
           "dynamodb:GetItem"
         ]
