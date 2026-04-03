@@ -14,7 +14,6 @@ resource "aws_iam_role" "this" {
     ]
   })
 }
-
 resource "aws_iam_role_policy" "access_s3_bucket" {
   name = "${local.name_prefix}-access-s3-bucket"
   role = aws_iam_role.this.id
@@ -86,7 +85,20 @@ resource "aws_iam_role_policy" "access_vpc_execution_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "dynamodb_read_only_access" {
-  role       = aws_iam_role.this.id
-  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+resource "aws_iam_role_policy" "dynamodb_read_only_access" {
+  name = "${local.name_prefix}-dynamodb-read-only"
+  role = aws_iam_role.this.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect : "Allow"
+        Resource = "${aws_dynamodb_table.this.arn}"
+        Action = [
+          "dynamodb:GetItem"
+        ]
+      }
+    ]
+  })
 }

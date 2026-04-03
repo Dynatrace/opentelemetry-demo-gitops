@@ -1,13 +1,12 @@
-const { trace } = require('@opentelemetry/api');
-const { NotFoundError } = require('./errors');
-const { inferContentType } = require('./util');
-const { getProductBucket } = require('./aws/ddb');
-const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require('./aws/s3');
+const { trace } = require("@opentelemetry/api");
+const { NotFoundError } = require("./errors");
+const { inferContentType } = require("./util");
+const { getProductBucket } = require("./aws/ddb");
+const { objectExists, getObjectBuffer, putObject, presignGetUrl } = require("./aws/s3");
 
-const log = require('./logger');
+const log = require("./logger");
 
-const tracer = trace.getTracer('product-image-lambda');
-
+const tracer = trace.getTracer("product-image-lambda");
 /**
  * Build S3 keys for original and target sizes.
  */
@@ -43,6 +42,9 @@ async function ensureTargetImage({
         });
       }
       return found;
+      } catch (error){
+        log.error(`Error looking for image for screen size ${screen}`, { error, bucket, targetKey });
+        throw error;
     } finally {
       span.end();
     }
@@ -85,6 +87,9 @@ async function ensureTargetImage({
           });
           putSpan.end();
         });
+      } catch (error) {
+        log.error(`Error with accessing S3 bucket for screen size ${screen}`, { error, bucket, originalKey, targetKey, screen });
+        throw error;
       } finally {
         span.end();
       }
@@ -97,7 +102,7 @@ async function ensureTargetImage({
       const signed = await presignGetUrl(bucket, targetKey, presignTtlSeconds);
       span.setAttribute('s3.presign.expiresIn', presignTtlSeconds);
 
-      log.info(`Presign URL generated correcltly for product image ${originalKey}.`, {originalKey});
+      log.info(`Presign URL generated correctly for product image ${originalKey}.`, {originalKey});
 
       return signed;
     } finally {

@@ -95,11 +95,8 @@ async function handler(event) {
         }
 
         log.error("Handler error", { error: err.message, stack: err.stack });
-        return {
-          statusCode: 500,
-          headers: CORS_HEADERS,
-          body: JSON.stringify({ error: "Internal server error" }),
-        };
+        
+        throw err;
       } finally {
         span.end();
       }
