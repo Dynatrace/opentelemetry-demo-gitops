@@ -94,7 +94,7 @@ resource "aws_iam_role_policy" "dynamodb_read_only_access" {
     Statement = [
       {
         Effect : "Allow"
-        Resource = "${aws_dynamodb_table.this.arn}"
+        Resource = "${aws_dynamodb_table.this.arn}/*"
         Action = [
           "dynamodb:GetItem"
         ]
