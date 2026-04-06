@@ -28,12 +28,23 @@ If you want to deploy the ingress resources (by setting `components.ingress.enab
 
 ### Helm deployment
 
-To deploy the helm chart you will first need to set the required values [here](./kustomize/base/values.yaml)
+To deploy the helm chart you will first need to set the required values in a local override file.
+
+Use [kustomize/base/values.yaml](./kustomize/base/values.yaml) as the checked-in template and create a local `kustomize/base/values.local.yaml` file with your real environment-specific values. The local file is ignored by git and loaded after `values.yaml` during deployment.
 
 You can check the possible values [here](./charts/astroshop/values.yaml)
 
 - _components.dt-credentials.tenantEndpoint_ - tenant url including the `/api/v2/otlp`, e.g. **https://wkf10640.live.dynatrace.com/api/v2/otlp**
 - _components.dt-credentials.tenantToken_ - access token using the `Kubernetes: Data Ingest` template
+
+Example `kustomize/base/values.local.yaml`:
+
+```yaml
+components:
+  dt-credentials:
+    tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp
+    tenantToken: dt0c01.abc.xxx
+```
 
 then run
 

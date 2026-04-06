@@ -8,12 +8,26 @@ helmCharts:
     releaseName: astroshop
     additionalValuesFiles:
       - values.yaml
+      - values.local.yaml
 
 namespace: astroshop
 
 resources:
   - ./namespace.yaml
+  - ./ingress-class-params.yaml
+  - ./ingress-class.yaml
+  - ./ingress.yaml
 
 components:
   - ../components/ownership-labels
   - ../components/flagd-config
+
+patches:
+  - target:
+      version: v1
+      kind: Deployment
+      name: image-provider
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/1/ports/0/name
+        value: metrics

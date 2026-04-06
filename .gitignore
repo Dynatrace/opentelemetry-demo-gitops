@@ -1,5 +1,6 @@
 *.env
 !*.example.env
+kustomize/**/values.local.yaml
 resources.yaml
 charts/**/charts
 kustomize/**/charts
