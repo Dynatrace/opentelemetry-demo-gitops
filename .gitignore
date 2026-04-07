@@ -1,6 +1,7 @@
 *.env
 !*.example.env
 kustomize/**/values.local.yaml
+kustomize/components/flag-admin-ui/data.env
 resources.yaml
 charts/**/charts
 kustomize/**/charts

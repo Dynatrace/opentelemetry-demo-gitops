@@ -21,6 +21,7 @@ resources:
 components:
   - ../components/ownership-labels
   - ../components/flagd-config
+  - ../components/flag-admin-ui
 
 patches:
   - target:

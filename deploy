@@ -12,6 +12,8 @@ else
     fi
 fi
 
+node ./scripts/render-admin-ui-secrets-env.js
+
 kustomize build \
     --enable-helm \
     --load-restrictor LoadRestrictionsNone \

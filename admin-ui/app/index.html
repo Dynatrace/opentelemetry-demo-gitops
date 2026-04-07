@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Astroshop Flag Admin</title>
+    <link rel="stylesheet" href="/admin/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Astroshop Admin</p>
+        <h1>Feature Flag Control Panel</h1>
+        <p class="lede">
+          Review the current `flagd` scenarios and propose changes through your fork.
+        </p>
+      </section>
+
+      <section class="panel panel-status">
+        <div>
+          <h2>Branch status</h2>
+          <p id="branch-status-text">Loading current branch state…</p>
+        </div>
+        <a id="pr-link" class="link-button hidden" href="#" target="_blank" rel="noreferrer">
+          Open pull request
+        </a>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Flags</h2>
+            <p>Only boolean `on` / `off` demo scenarios are editable in this first version.</p>
+          </div>
+          <button id="save-button" class="primary-button" disabled>Save changes</button>
+        </div>
+
+        <div id="message" class="message hidden"></div>
+        <div id="flags" class="flag-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="/admin/client.js" defer></script>
+  </body>
+  </html>

@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: flag-admin-ui-app
+    options:
+      disableNameSuffixHash: true
+    files:
+      - ../../../admin-ui/app/server.js
+      - ../../../admin-ui/app/lib.js
+      - ../../../admin-ui/app/index.html
+      - ../../../admin-ui/app/client.js
+      - ../../../admin-ui/app/styles.css
+
+secretGenerator:
+  - name: flag-admin-ui-secrets
+    options:
+      disableNameSuffixHash: true
+    envs:
+      - data.env
+
+patches:
+  - target:
+      version: v1
+      kind: Ingress
+      name: astroshop
+    patch: |-
+      - op: add
+        path: /spec/rules/0/http/paths/-
+        value:
+          path: /admin
+          pathType: Prefix
+          backend:
+            service:
+              name: flag-admin-ui
+              port:
+                number: 8080

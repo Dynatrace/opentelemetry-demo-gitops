@@ -4,6 +4,7 @@ This repository contains Helm chart for [Astroshop](https://github.com/Dynatrace
 
 - sample deployment script
 - [Argocd](./flagd/README.md) configuration used to showcase Dynatrace's ability to monitor gitops
+- a small internal admin UI for proposing `flagd` feature-flag changes through GitHub
 
 ## Deployment
 
@@ -44,6 +45,10 @@ components:
   dt-credentials:
     tenantEndpoint: https://wkf10640.live.dynatrace.com/api/v2/otlp
     tenantToken: dt0c01.abc.xxx
+  flag-admin-ui:
+    authUsername: admin
+    authPassword: "change-me"
+    githubToken: ghp_xxx
 ```
 
 then run
@@ -67,6 +72,20 @@ If you want to deploy a version with extra features can use one of the overlays 
 You can read more about it [here](./image-provider/)
 
 Once you've deployed the infrastructure you need to take the lambda url and set it in the [env file](./kustomize/components/image-provider/data.env)
+
+### Flag admin UI
+
+The deployment also includes an internal admin UI at `/admin` for supported `flagd` feature toggles.
+
+Set the `components.flag-admin-ui` values in `kustomize/base/values.local.yaml` and the deploy script will generate the `flag-admin-ui-secrets` Secret automatically during deployment.
+
+If the admin password contains YAML-special characters such as `#` or `:`, wrap it in quotes.
+
+The UI:
+
+- reads `kustomize/components/flagd-config/demo.flagd.json` from your fork
+- allows trusted admins to toggle supported boolean scenarios
+- creates or updates a PR on the `admin/flag-toggles` branch instead of mutating the live cluster directly
 
 # Flagd configuration change: problem patterns
 
