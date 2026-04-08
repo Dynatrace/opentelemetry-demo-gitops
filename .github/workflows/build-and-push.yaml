@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install helm
-        uses: azure/setup-helm@v4.3.0
+        uses: azure/setup-helm@v5
         with:
           version: "3.18.2"
       - name: Setup helm
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Auth gcloud
         uses: google-github-actions/auth@v2
         with:
@@ -52,17 +52,17 @@ jobs:
     if: ${{ inputs.push }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install helm
-        uses: azure/setup-helm@v4.3.0
+        uses: azure/setup-helm@v5
         with:
           version: "3.18.2"
       - name: Auth gcloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           credentials_json: "${{ secrets.GCLOUD_SA }}"
       - name: Set up sdk
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
       - name: Setup helm
         run: ./$SCRIPTS_PATH/setup-helm
       - name: Build and push
