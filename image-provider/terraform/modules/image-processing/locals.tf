@@ -12,5 +12,5 @@ locals {
   # The failure simulates losing IAM permission to read the DynamoDB table used to retrieve the bucket name,
   # so the Lambda will throw an error when attempting that lookup.
   # NOTE: This change is intended to apply to all environments.
-  image_provider_failure_enabled = false
+  image_provider_failure_enabled = true
 }
