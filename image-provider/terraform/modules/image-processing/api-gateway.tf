@@ -24,8 +24,10 @@ resource "aws_apigatewayv2_route" "this" {
   target    = "integrations/${aws_apigatewayv2_integration.this.id}"
 }
 
+# Log group naming convention: API-GatewayV2-Access-Logs*
+# Source: https://docs.dynatrace.com/docs/ingest-from/amazon-web-services/ingest-telemetry/cloudwatch-logs#supplogsources
 resource "aws_cloudwatch_log_group" "api_gw_access" {
-  name              = "API-Gateway-Access-Logs_${aws_apigatewayv2_api.this.name}"
+  name              = "API-GatewayV2-Access-Logs-${aws_apigatewayv2_api.this.name}"
   retention_in_days = 7
 }
 
