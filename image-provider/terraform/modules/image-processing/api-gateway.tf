@@ -35,7 +35,7 @@ resource "aws_apigatewayv2_stage" "this" {
   auto_deploy = true
   access_log_settings {
     destination_arn = aws_cloudwatch_log_group.api_gw_access.arn
-    format          = jsonencode({
+    format = jsonencode({
       requestId               = "$context.requestId"
       ip                      = "$context.identity.sourceIp"
       requestTime             = "$context.requestTime"
