@@ -8,31 +8,6 @@
 apiVersion: "networking.k8s.io/v1"
 kind: Ingress
 metadata:
-  name: postgresql
-  namespace: "{{ .Release.Namespace }}"
-  annotations:
-    {{ $ipWhitelistAnnotation }}
-    {{ $customAnnotations }}
-spec:
-  ingressClassName: nginx
-  {{ $ingressTls }}
-  rules:
-    - host: {{ $host }}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: postgresql
-                port:
-                  number: 5432
-{{- end }}
-{{- if .Values.components.ingress.components.postgresql }}
----
-apiVersion: "networking.k8s.io/v1"
-kind: Ingress
-metadata:
   name: frontendproxy-root
   namespace: "{{ .Release.Namespace }}"
   annotations:
@@ -158,5 +133,30 @@ spec:
                 name: flagd
                 port:
                   number: 8013
+{{- end }}
+{{- if .Values.components.ingress.components.postgresql }}
+---
+apiVersion: "networking.k8s.io/v1"
+kind: Ingress
+metadata:
+  name: postgresql
+  namespace: "{{ .Release.Namespace }}"
+  annotations:
+    {{ $ipWhitelistAnnotation }}
+    {{ $customAnnotations }}
+spec:
+  ingressClassName: nginx
+  {{ $ingressTls }}
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: postgresql
+                port:
+                  number: 5432
 {{- end }}
 {{- end }}

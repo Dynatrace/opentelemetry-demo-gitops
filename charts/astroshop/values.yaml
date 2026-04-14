@@ -22,7 +22,7 @@ components:
       images: true
       feature-flags: true
       flagd-ui: true
-      postgresql: true
+      postgresql: true # enabled for extension connection from AG
     # the ip whitelist used for the ingress
     # allows for limitting the allowed ips, leave empty to not add the restriction
     # two separate fields are given to allow for more complicated setups
