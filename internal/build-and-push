@@ -39,7 +39,7 @@ gcloud auth print-access-token \
 | helm registry login \
     -u oauth2accesstoken \
     --password-stdin \
-    "${BASE_REPO}"
+    "${BASE_REPO/#"oci://"}"
 
 function checkChartVersion() {
     local repo=${1/#"oci://"} # removes the oci prefix from repo

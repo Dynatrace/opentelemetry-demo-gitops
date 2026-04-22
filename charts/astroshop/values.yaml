@@ -197,6 +197,11 @@ opentelemetry-demo:
     # ---------------------------------------------------
     frontend-proxy:
       enabled: true
+      envOverrides:
+        - name: FLAGD_UI_HOST
+          value: "flagd"
+        - name: FLAGD_UI_PORT
+          value: "4000"
     # ---------------------------------------------------
     image-provider:
       podAnnotations:
