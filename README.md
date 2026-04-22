@@ -1,98 +1,111 @@
-# Opentelemetry demo gitops
+# OpenTelemetry Demo GitOps
 
-This repository contains Helm chart for [Astroshop](https://github.com/Dynatrace/opentelemetry-demo), an adaptation of the [Opentelemetry Demo](https://github.com/open-telemetry/opentelemetry-demo) app, alongside with:
+This repository contains everything needed to deploy and operate [Astroshop](https://github.com/Dynatrace/opentelemetry-demo), a Dynatrace adaptation of the [OpenTelemetry Demo](https://github.com/open-telemetry/opentelemetry-demo) application.
 
-- sample deployment script
-- [Argocd](./flagd/README.md) configuration used to showcase Dynatrace's ability to monitor gitops
+## What's in this repo
 
-## Deployment
+| Directory          | Description                                                                       |
+| ------------------ | --------------------------------------------------------------------------------- |
+| `charts/astroshop` | Helm chart for the Astroshop application                                          |
+| `kustomize/`       | Example kustomize deployments that use the Helm chart                             |
+| `config/`          | Example deployments for cluster-level prerequisites (Dynatrace operator, ingress) |
+| `image-provider/`  | AWS Lambda code and Terraform config for the optional image provider feature      |
+| `flagd/`           | ArgoCD-managed feature flag configs used to trigger problem patterns at runtime   |
+
+## Deploying Astroshop
 
 ### Requirements
 
+- A running Kubernetes cluster
 - [Helm](https://helm.sh/docs/intro/install/) >= 3.18
 - [kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/) >= 5.7
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- Dynatrace tenant
+- [kubectl](https://kubernetes.io/docs/tasks/tools/) configured to point at your cluster
+- A Dynatrace tenant
 
-### Prerequisites
+### Step 1 — Install cluster prerequisites
 
-To properly function the Astroshop deployment requires a few other tools to be present on the cluster, however since they are not a part of the Astroshop itself, they are not included in the helm chart and have to be installed separately. We provide sample deployments but you can install them however you see fit or use already existing ones.
+These tools must be present on the cluster before deploying Astroshop. Sample deployments are provided but you can install them however you prefer, or reuse existing installations.
 
-#### Dynatrace operator
+#### Dynatrace operator (required)
 
-To monitor the cluster with Dynatrace you can follow the official [guide](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/deployment/full-stack-observability) or use the sample [deployment](./config/dt-operator/README.md)
+The operator handles Kubernetes monitoring and injects the OneAgent into workloads.
 
-#### Ingress controller [optional]
+Follow the official [guide](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/deployment/full-stack-observability) or use the sample deployment in [`config/dt-operator/`](./config/dt-operator/README.md).
 
-If you want to deploy the ingress resources (by setting `components.ingress.enabled: true` in values) you will need the ingress controller running on the cluster. If you already have one running make sure that it's properly instrumented. Sample installation info [here](./config/ingress/README.md)
+#### Ingress controller (optional)
 
-### Helm deployment
+Required only if you want to expose Astroshop via an ingress resource (controlled by `components.ingress.enabled` in values). If you already have an ingress controller running, make sure it is instrumented with Dynatrace.
 
-To deploy the helm chart you will first need to set the required values [here](./kustomize/base/values.yaml)
+See [`config/ingress/`](./config/ingress/README.md) for a sample nginx setup.
 
-You can check the possible values [here](./charts/astroshop/values.yaml)
+### Step 2 — Configure values
 
-- _components.dt-credentials.tenantEndpoint_ - tenant url including the `/api/v2/otlp`, e.g. **https://wkf10640.live.dynatrace.com/api/v2/otlp**
-- _components.dt-credentials.tenantToken_ - access token using the `Kubernetes: Data Ingest` template
+Open [`kustomize/base/values.yaml`](./kustomize/base/values.yaml) and fill in your Dynatrace tenant details:
 
-then run
+```yaml
+components:
+  dt-credentials:
+    tenantEndpoint: https://<your-tenant-id>.live.dynatrace.com/api/v2/otlp
+    tenantToken: <your-data-ingest-token>
+```
+
+- `tenantEndpoint` — your tenant URL with the `/api/v2/otlp` path appended
+- `tenantToken` — an access token created using the `Kubernetes: Data Ingest` template
+
+You can see all available chart values in [`charts/astroshop/values.yaml`](./charts/astroshop/values.yaml).
+
+### Step 3 — Deploy
+
+Run the deploy script from the root of the repository:
 
 ```bash
 ./deploy
 ```
 
-#### Overlays
+The script runs `kustomize build --enable-helm` against `kustomize/base` and pipes the output to `kubectl apply`. Astroshop is deployed into the `astroshop` namespace, which is created automatically.
 
-If you want to deploy a version with extra features can use one of the overlays or create your own
-
-> **NOTE:** the extra components being deployed may require extra configuration, refer to their READMEs to check what data needs to be provided
+### Step 4 — Verify
 
 ```bash
-./deploy {overlay-name}
+kubectl get pods -n astroshop
 ```
 
-##### AWS lambda image provider
+All pods should reach `Running` state within a few minutes.
 
-You can read more about it [here](./image-provider/)
+### Accessing the frontend (without ingress)
 
-Once you've deployed the infrastructure you need to take the lambda url and set it in the [env file](./kustomize/components/image-provider/data.env)
+If you deployed without an ingress controller, you can reach the Astroshop frontend via port-forwarding:
 
-# Flagd configuration change: problem patterns
-
-## About
-
-ArgoCD monitors the directory under the application called **opentelemetry-demo-flagd-config**. After each modification, ArgoCD synchronizes the data and applies the changes. The goal of this configuration is to switch the feature flags state of OpenTelemetry demo configuration, which in effect enables or disables problem patterns
-
-## Purpose of configuration files
-
-Flagd stores feature flag states in a ConfigMap. To toggle a problem pattern, the value of the flag needs to be updated. Flagd itself doesn't detect manual changes in the ConfigMap, to apply changes Flagd need to be restarted. To facilitate this, a job has been added that restarts Flagd after a feature flag change.
-
-## Configuration
-
-`flagd-config.yaml` contains ConfigMap with feature flag states
-
-To toggle flag, change value of **defaultVariant** to either **on** or **off**.
-
-```json
-"productCatalogFailure": {
-    "description": "Fail product catalog service on a specific product",
-    "state": "ENABLED",
-    "variants": {
-        "on": true,
-        "off": false
-    },
-    "defaultVariant": "off"
-}
+```bash
+kubectl port-forward svc/astroshop-frontendproxy 8080:8080 -n astroshop
 ```
 
-`flagd-restart.yaml` contains job restarting flagd
+The application will then be available at [http://localhost:8080](http://localhost:8080).
 
-Job is tagged as ArgoCD hook, which is triggered automatically after succesful sync and deleted afterward.
+---
 
-```yaml
-annotations:
-  #  triggers hook after sync
-  argocd.argoproj.io/hook: PostSync
-  #  deletes hook resourcers after successful deployment
-  argocd.argoproj.io/hook-delete-policy: HookSucceeded
+## Overlays
+
+Overlays extend the base deployment with optional components. To deploy with an overlay:
+
+```bash
+./deploy <overlay-name>
 ```
+
+### Available overlays
+
+| Overlay          | What it adds                                |
+| ---------------- | ------------------------------------------- |
+| `all-components` | SQS connection + image provider integration |
+
+> **Note:** overlays may require additional configuration — see the relevant component READMEs before deploying.
+
+For the image provider specifically, see [`image-provider/`](./image-provider/README.md) for setup steps and the required Terraform infrastructure.
+
+---
+
+## Feature flags (GitOps via ArgoCD)
+
+The `flagd/` directory contains feature flag configurations that are monitored by ArgoCD. Changing a flag value and pushing the change is enough to toggle a problem pattern in the running application — ArgoCD will sync the ConfigMap and restart Flagd automatically.
+
+See [`flagd/README.md`](./flagd/README.md) for details.
