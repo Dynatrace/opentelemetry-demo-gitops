@@ -6,7 +6,7 @@
 
 cd "$(dirname "$0")"
 
-BASE_REPO="oci://europe-docker.pkg.dev"
+BASE_REPO="europe-docker.pkg.dev"
 HELM_REPO="${BASE_REPO}/dynatrace-demoability/helm"
 CHART_PATH="../charts/astroshop"
 
@@ -39,10 +39,10 @@ gcloud auth print-access-token \
 | helm registry login \
     -u oauth2accesstoken \
     --password-stdin \
-    "${BASE_REPO/#"oci://"}"
+    "${BASE_REPO}"
 
 function checkChartVersion() {
-    local repo=${1/#"oci://"} # removes the oci prefix from repo
+    local repo=$1
     local tag=$2
 
     gcloud artifacts docker tags list "${repo}" --format="value(tag)" | grep -Fx "${tag}"
@@ -59,4 +59,4 @@ else
 fi
 
 echo "Pushing the chart to repo"
-helm push "${FILE_NAME}" "${HELM_REPO}"
+helm push "${FILE_NAME}" "oci://${HELM_REPO}"
