@@ -40,7 +40,7 @@ opentelemetry-demo:
   default:
     image:
       repository: europe-docker.pkg.dev/dynatrace-demoability/docker/astroshop
-      tag: 5824c4b
+      tag: 22fe175
   components:
     # ---------------------------------------------------
     accounting:
