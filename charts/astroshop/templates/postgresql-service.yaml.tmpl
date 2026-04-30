@@ -1,4 +1,4 @@
-{{- if index .Values "components" "postgresql-service" "enabled" }}
+{{- if index .Values.components.postgresqlExternalService.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
