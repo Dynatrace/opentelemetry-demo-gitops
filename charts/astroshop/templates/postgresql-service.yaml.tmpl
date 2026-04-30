@@ -1,0 +1,13 @@
+{{- if index .Values.components.postgresqlExternalService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-postgresql-external
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  {{- with .Values.components.postgresqlExternalService.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
