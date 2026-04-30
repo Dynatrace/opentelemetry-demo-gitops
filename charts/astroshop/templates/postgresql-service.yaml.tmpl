@@ -6,8 +6,7 @@ metadata:
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Local
-  {{- $otel := index .Values "opentelemetry-demo" }}
-  {{- with $otel.components.postgresql.service.loadBalancerSourceRanges }}
+  {{- with .Values.components.postgresqlExternalService.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
   {{- toYaml . | nindent 4 }}
   {{- end }}

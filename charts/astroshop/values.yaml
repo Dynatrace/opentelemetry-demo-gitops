@@ -28,7 +28,7 @@ components:
     ipWhitelist:
       base: []
       extra: []
-  postgresql-service:
+  postgresqlExternalService:
     # when enabled, a LoadBalancer Service exposing postgresql externally will be created
     enabled: false
   product-db-connection:
