@@ -105,7 +105,7 @@ data:
               "american-express": "American Express"
             }
           },
-          "defaultVariant": "off"
+          "defaultVariant": "on"
         },
         "loadgeneratorFloodHomepage": {
           "description": "Flood the frontend with a large amount of requests.",
