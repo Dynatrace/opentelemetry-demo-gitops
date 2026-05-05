@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-postgresql-external
 spec:
+  ports:
+    - port: 5432
   type: LoadBalancer
   externalTrafficPolicy: Local
   {{- with .Values.components.postgresqlExternalService.loadBalancerSourceRanges }}
