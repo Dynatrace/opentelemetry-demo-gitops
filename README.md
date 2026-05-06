@@ -6,7 +6,6 @@ This repository contains everything needed to deploy and operate [Astroshop](htt
 
 | Directory          | Description                                                                       |
 | ------------------ | --------------------------------------------------------------------------------- |
-| `charts/astroshop` | Helm chart for the Astroshop application                                          |
 | `kustomize/`       | Example kustomize deployments that use the Helm chart                             |
 | `config/`          | Example deployments for cluster-level prerequisites (Dynatrace operator, ingress) |
 | `image-provider/`  | AWS Lambda code and Terraform config for the optional image provider feature      |
@@ -52,7 +51,7 @@ components:
 - `tenantEndpoint` — your tenant URL with the `/api/v2/otlp` path appended
 - `tenantToken` — an access token created using the `Kubernetes: Data Ingest` template
 
-You can see all available chart values in [`charts/astroshop/values.yaml`](./charts/astroshop/values.yaml).
+You can see all available chart values in [`opentelemetry-demo`](https://github.com/Dynatrace/opentelemetry-demo/charts/astroshop/values.yaml) repo.
 
 ### Step 3 — Deploy
 
