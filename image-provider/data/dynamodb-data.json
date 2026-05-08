@@ -38,5 +38,9 @@
     {
         "image": "TheCometBook.jpg",
         "bucket": "accessories"
+    },
+    {
+        "image": "Banner.png",
+        "bucket": "static"
     }
 ]

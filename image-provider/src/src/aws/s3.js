@@ -17,6 +17,9 @@ async function objectExists(bucket, key) {
     await s3.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
     return true;
   } catch (error) {
+    if (error.name === 'NotFound' || error.$metadata?.httpStatusCode === 404) {
+      return false;
+    }
     log.error('Error checking if object exists in S3', { error, bucket, key });
     throw error;
   }
