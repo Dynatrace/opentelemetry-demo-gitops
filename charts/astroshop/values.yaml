@@ -28,6 +28,9 @@ components:
     ipWhitelist:
       base: []
       extra: []
+  postgresqlExternalService:
+    # when enabled, a LoadBalancer Service exposing postgresql externally will be created
+    enabled: false
   product-db-connection:
     # when enabled, secret with name `product-db-connection` will be created
     # set to disabled if you want to provide those values in other way
