@@ -10,9 +10,8 @@ locals {
   }
   name_prefix = "image-provider-${var.environment}"
 
-  # When set to true, this flag causes the image-provider Lambda to fail during image processing.
-  # The failure simulates losing IAM permission to read the DynamoDB table used to retrieve the bucket name,
-  # so the Lambda will throw an error when attempting that lookup.
+  # When set to false, this flag ensures the image-provider Lambda has IAM permission to read the DynamoDB table
+  # used to retrieve the bucket name, allowing the Lambda to function correctly during image processing.
   # NOTE: This change is intended to apply to all environments.
   image_provider_failure_enabled = false
 }
