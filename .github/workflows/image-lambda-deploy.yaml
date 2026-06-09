@@ -119,7 +119,7 @@ jobs:
 
       - name: Send events to Dynatrace
         if: steps.tf_apply.outcome == 'success'
-        uses: dynatrace-oss/dynatrace-github-action@v9.2
+        uses: dynatrace-oss/dynatrace-github-action@v9.3.0
         with:
           url: ${{ secrets[matrix.dt_url_secret] }}
           token: ${{ secrets[matrix.dt_token_secret] }}
