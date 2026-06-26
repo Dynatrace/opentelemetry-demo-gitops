@@ -135,3 +135,21 @@ jobs:
                 github.event_name: ${{ github.event_name }}
                 github.commit: ${{ github.sha }}
                 terraform.outcome: ${{ steps.tf_apply.outcome }}
+
+      - name: Send failure event to Dynatrace (live3gen)
+        if: steps.tf_apply.outcome == 'failure'
+        uses: dynatrace-oss/dynatrace-github-action@v9.4.0
+        with:
+          url: ${{ secrets.DT_URL_LIVE3GEN }}
+          token: ${{ secrets.DT_TOKEN_LIVE3GEN }}
+          events: |
+            - title: Github Actions for ${{ github.workflow }} - FAILED
+              type: GITHUB_ACTIONS_FAILURE
+              properties:
+                source: GitHub
+                event.description: Terraform apply FAILED for image-provider-${{ matrix.env }} from [commit](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
+                github.repository: ${{ github.repository }}
+                github.ref: ${{ github.ref }}
+                github.event_name: ${{ github.event_name }}
+                github.commit: ${{ github.sha }}
+                terraform.outcome: ${{ steps.tf_apply.outcome }}
