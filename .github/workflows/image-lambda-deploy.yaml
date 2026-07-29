@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         dir: [image-provider]
-       env: [staging, live, live3gen, playground-dev, playground-staging, playground]
+        env: [staging, live, live3gen, playground-dev, playground-staging, playground]
         include:
           - env: staging
             dt_url_secret: "DT_URL_STAGING"
