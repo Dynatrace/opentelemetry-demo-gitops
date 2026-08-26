@@ -62,6 +62,7 @@ module "image_processing" {
   enable_dac_logs              = local.enable_dac_logs
   dac_firehose_arn             = local.enable_dac_logs ? module.firehose[0].firehose_arn : null
   dac_ingest_role_arn          = local.enable_dac_logs ? module.firehose[0].ingest_role_arn : null
+  stage                        = local.stage
 }
 
 module "secrets" {

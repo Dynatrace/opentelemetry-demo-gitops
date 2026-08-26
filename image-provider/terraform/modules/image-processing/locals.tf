@@ -15,4 +15,11 @@ locals {
   # so the Lambda will throw an error when attempting that lookup.
   # NOTE: This change is intended to apply to all environments.
   image_provider_failure_enabled = false
+
+  primary_tags = {
+    application = "astroshop"
+    team        = "Team-Cloud-Services"
+    costcenter  = "rnd"
+    costproduct = "astroshop"
+  }
 }

@@ -63,3 +63,8 @@ variable "dac_ingest_role_arn" {
   description = "ARN of the IAM role to be assumed by CloudWatch Logs for writing to the DAC Firehose."
   default     = ""
 }
+
+variable "stage" {
+  type        = string
+  description = "Deployment stage"
+}
