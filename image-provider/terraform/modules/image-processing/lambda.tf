@@ -41,5 +41,7 @@ resource "aws_lambda_function" "this" {
   tracing_config {
     mode = "PassThrough"
   }
+
+  tags = merge(local.primary_tags, { stage = var.stage })
 }
 
