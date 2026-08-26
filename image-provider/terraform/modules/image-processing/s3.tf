@@ -3,6 +3,8 @@ resource "aws_s3_bucket" "products" {
 
   bucket        = "${local.name_prefix}-${each.key}"
   force_destroy = true
+
+  tags = merge(local.primary_tags, { stage = var.stage })
 }
 
 resource "aws_s3_object" "products" {
