@@ -117,21 +117,16 @@ jobs:
         id: tf_apply
         run: terraform apply -no-color -auto-approve
 
+      - name: Install Dynatrace script dependencies
+        if: steps.tf_apply.outcome == 'success'
+        working-directory: .github/scripts/dynatrace
+        run: npm ci
+
       - name: Send events to Dynatrace
         if: steps.tf_apply.outcome == 'success'
-        uses: dynatrace-oss/dynatrace-github-action@v9.4.0
-        with:
-          url: ${{ secrets[matrix.dt_url_secret] }}
-          token: ${{ secrets[matrix.dt_token_secret] }}
-          events: |
-            - title: Github Actions for ${{ github.workflow }}
-              type: CUSTOM_DEPLOYMENT
-              entitySelector: type(SERVICE), entityName.equals("image-provider-${{ matrix.env }} in ${{ env.AWS_REGION }}")
-              properties:
-                source: GitHub
-                event.description: Image processing problem trigger from [PR](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-                github.repository: ${{ github.repository }}
-                github.ref: ${{ github.ref }}
-                github.event_name: ${{ github.event_name }}
-                github.commit: ${{ github.sha }}
-                terraform.outcome: ${{ steps.tf_apply.outcome }}
+        env:
+          DT_URL: ${{ secrets[matrix.dt_url_secret] }}
+          DT_TOKEN: ${{ secrets[matrix.dt_token_secret] }}
+          DEPLOY_ENV: ${{ matrix.env }}
+          TERRAFORM_OUTCOME: ${{ steps.tf_apply.outcome }}
+        run: node .github/scripts/dynatrace/send-deployment-event.js
