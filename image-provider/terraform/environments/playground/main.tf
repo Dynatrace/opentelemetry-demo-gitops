@@ -31,7 +31,7 @@ provider "aws" {
       deployed-with  = "terraform"
       git-repository = "https://github.com/Dynatrace/opentelemetry-demo-gitops"
       dt_owner_email = "rafal.psciuk@dynatrace.com"
-      dt_owner_team  = "team-demoability"
+      dt_owner_team  = "team-unc"
       env            = local.environment
     }
   }
