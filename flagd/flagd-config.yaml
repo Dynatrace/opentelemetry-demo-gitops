@@ -96,13 +96,12 @@ data:
           "variants": {
             "on": {
               "visa": "Visa",
-              "mastercard": "Mastercard",
-              "union_pay": "UnionPay"
+              "mastercard": "Mastercard"
             },
             "off": {
               "visa": "Visa",
-              "mastercard": "Mastercard",
-              "unionpay": "UnionPay"
+              "unionpay": "UnionPay",
+              "mastercard": "Mastercard"
             }
           },
           "defaultVariant": "off"
