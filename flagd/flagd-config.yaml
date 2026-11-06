@@ -100,8 +100,8 @@ data:
             },
             "off": {
               "visa": "Visa",
-              "mastercard": "Mastercard",
-              "american-express": "American Express"
+              "unionpay": "UnionPay",
+              "mastercard": "Mastercard"
             }
           },
           "defaultVariant": "off"
