@@ -100,11 +100,13 @@ data:
             "on": {
               "visa": "Visa",
               "mastercard": "Mastercard",
+              "american-express": "American Express"
             },
             "off": {
               "visa": "Visa",
               "unionpay": "UnionPay",
-              "mastercard": "Mastercard"
+              "mastercard": "Mastercard",
+              "american-express": "American Express"
             }
           },
           "defaultVariant": "off"
