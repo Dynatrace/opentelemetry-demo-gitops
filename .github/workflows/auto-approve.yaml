@@ -12,7 +12,7 @@ on:
 jobs:
   approve:
     name: Auto-approve
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: github.event.pull_request.user.login == 'demoability-robot'
     steps:
       - name: Generate a token
@@ -21,23 +21,18 @@ jobs:
         with:
           client-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-      - uses: actions/github-script@v9
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github/scripts
+      - name: Approve PR
+        uses: actions/github-script@v9
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
-            await github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-              event: "APPROVE"
-            })
-      - uses: actions/github-script@v9
+            await require("./.github/scripts/approve-pr.js")({ github, context, core })
+      - name: Merge PR
+        uses: actions/github-script@v9
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
-            await github.rest.pulls.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-              merge_method: "squash"
-            })
+            await require("./.github/scripts/merge-pr.js")({ github, context, core })
